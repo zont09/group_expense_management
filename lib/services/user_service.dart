@@ -13,6 +13,11 @@ class UserService {
     return response;
   }
 
+  Future<UserModel?> getUserByEmail(String email) async {
+    final response = await _userRepository.getUserByEmail(email);
+    return response;
+  }
+
   Future<void> addUser(UserModel model) async {
     await _userRepository.addUser(model);
   }

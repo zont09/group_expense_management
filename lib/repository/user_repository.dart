@@ -31,6 +31,22 @@ class UserRepository {
     }
   }
 
+  Future<UserModel?> getUserByEmail(String email) async {
+    try {
+      final snapshot = await fireStore
+          .collection("users")
+          .where("email", isEqualTo: email)
+          .where('enable', isEqualTo: true)
+          .get();
+      return snapshot.docs
+          .map((e) => UserModel.fromSnapshot(e))
+          .firstOrNull;
+    } catch (e) {
+      debugPrint("====> Error get user by email: $e");
+      return null;
+    }
+  }
+
   Future<void> addUser(UserModel model) async {
     try {
       await fireStore

@@ -28,12 +28,12 @@ class ColorConfig {
   static const Color greenState = Color(0xFF65C728);
   static const Color yellowState = Color(0xFFFFC800);
 
-  static const Color primary1 = Color(0xFF950606);
-  static const Color primary2 = Color(0xFFBF1D1E);
-  static const Color primary3 = Color(0xFFC91D20);
-  static const Color primary4 = Color(0xFFFE4048);
-  static const Color primary5 = Color(0xFFFFD6D6);
-  static const Color primary6 = Color(0xFFE7EDFF);
+  static const Color primary1 = Color(0xFF0357AF);
+  static const Color primary2 = Color(0xFF0180CC);
+  static const Color primary3 = Color(0xFF74CEF7);
+  static const Color primary4 = Color(0xFF9BE8F0);
+  static const Color primary5 = Color(0xFFE6FBFA);
+  static const Color primary6 = Color(0xFFE4815A);
   static const Color primary7 = Color(0xFFE6EFF5);
 
   static const LinearGradient gradientPrimary1 = LinearGradient(
