@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/app_texts.dart';
 import 'package:group_expense_management/configs/color_configs.dart';
 import 'package:group_expense_management/features/login/bloc/login_cubit.dart';
-import 'package:group_expense_management/features/login/widgets/gradient_text.dart';
 import 'package:group_expense_management/features/login/widgets/password_textfield.dart';
 import 'package:group_expense_management/features/login/widgets/sign_in_with_gg_button.dart';
 import 'package:group_expense_management/features/login/widgets/username_textfield.dart';
