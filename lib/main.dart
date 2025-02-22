@@ -1,6 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:group_expense_management/services/user_service.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -61,7 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () async {
+          final users = await UserService.instance.getAllUsers();
+          for(var e in users) {
+            debugPrint("===> User: ${e.toString()}");
+          }
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
