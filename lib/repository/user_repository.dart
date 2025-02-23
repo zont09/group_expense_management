@@ -36,7 +36,7 @@ class UserRepository {
       final snapshot = await fireStore
           .collection("users")
           .where("email", isEqualTo: email)
-          .where('enable', isEqualTo: true)
+          // .where('enable', isEqualTo: true)
           .get();
       return snapshot.docs
           .map((e) => UserModel.fromSnapshot(e))

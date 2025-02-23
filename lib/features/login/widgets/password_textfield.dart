@@ -6,12 +6,14 @@ class PasswordTextField extends StatefulWidget {
   final String hintText;
   final IconData icon;
   final TextEditingController? controller;
+  final Color border;
 
   const PasswordTextField({
     super.key,
     required this.hintText,
     required this.icon,
     this.controller,
+    this.border = ColorConfig.border6
   });
 
   @override
@@ -50,18 +52,18 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(229),
             borderSide: BorderSide(
-                color: ColorConfig.border6,
+                color: widget.border,
                 width: Resizable.size(context, 1)), // Viền khi focus
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(229),
             borderSide: BorderSide(
-                color: ColorConfig.border6,
+                color: widget.border,
                 width: Resizable.size(context, 1)), // Viền khi không focus
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(229),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
                 color: ColorConfig.primary1, width: 2), // Viền khi focus
           ),
           isDense: true,
