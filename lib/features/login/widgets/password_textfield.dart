@@ -7,13 +7,17 @@ class PasswordTextField extends StatefulWidget {
   final IconData icon;
   final TextEditingController? controller;
   final Color border;
+  final bool isError;
+  final Function(int)? changeError;
 
   const PasswordTextField({
     super.key,
     required this.hintText,
     required this.icon,
     this.controller,
-    this.border = ColorConfig.border6
+    this.border = ColorConfig.border6,
+    this.isError = false,
+    this.changeError,
   });
 
   @override
@@ -22,6 +26,18 @@ class PasswordTextField extends StatefulWidget {
 
 class _PasswordTextFieldState extends State<PasswordTextField> {
   bool _isObscured = true;
+
+  @override
+  void initState() {
+    widget.controller?.addListener(listenerController);
+    super.initState();
+  }
+
+  listenerController() {
+    if (widget.isError && widget.changeError != null) {
+      widget.changeError!(0);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +68,13 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(229),
             borderSide: BorderSide(
-                color: widget.border,
+                color: widget.isError ? ColorConfig.error : widget.border,
                 width: Resizable.size(context, 1)), // Viền khi focus
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(229),
             borderSide: BorderSide(
-                color: widget.border,
+                color: widget.isError ? ColorConfig.error : widget.border,
                 width: Resizable.size(context, 1)), // Viền khi không focus
           ),
           focusedBorder: OutlineInputBorder(

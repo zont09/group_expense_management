@@ -7,7 +7,6 @@ import 'package:group_expense_management/utils/resizable_utils.dart';
 import 'package:group_expense_management/widgets/z_button.dart';
 
 class DialogUtils {
-
   static Future<void> showLoadingDialog(BuildContext context) {
     return showDialog(
       context: context,
@@ -40,9 +39,12 @@ class DialogUtils {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24), // Cùng kiểu bo góc
+          borderRadius: BorderRadius.circular(12), // Cùng kiểu bo góc
         ),
-        contentPadding: EdgeInsets.all(Resizable.size(context, 25)),
+        contentPadding: EdgeInsets.symmetric(
+                vertical: Resizable.size(context, 12),
+                horizontal: Resizable.size(context, 12))
+            .copyWith(bottom: Resizable.size(context, 12)),
         // Cùng padding
         content: SizedBox(
           width: Resizable.size(context, 436),
@@ -54,57 +56,61 @@ class DialogUtils {
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: Resizable.font(context, 24),
+                  fontSize: Resizable.font(context, 20),
                   color: mainColor,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(height: Resizable.size(context, 20)),
+              SizedBox(height: Resizable.size(context, 8)),
               Text(
                 message,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: Resizable.font(context, 18),
-                  fontWeight: FontWeight.w400,
+                  fontSize: Resizable.font(context, 16),
+                  fontWeight: FontWeight.w400
                 ),
               ),
-            ],
-          ),
-        ),
-        actionsPadding: EdgeInsets.symmetric(
-          horizontal: Resizable.size(context, 25),
-          vertical: Resizable.size(context, 25),
-        ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ZButton(
-                title: AppText.btnOk.text,
-                colorBackground: mainColor,
-                // Dùng màu chính
-                colorBorder: mainColor,
-                sizeTitle: 18,
-                icon: "",
-                paddingHor: 35,
-                // Đảm bảo padding giống Confirm
-                onPressed: () => Navigator.of(context).pop(),
+              SizedBox(height: Resizable.size(context, 20)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ZButton(
+                    title: AppText.btnOk.text,
+                    colorBackground: mainColor,
+                    // Dùng màu chính
+                    colorBorder: mainColor,
+                    sizeTitle: 16,
+                    icon: "",
+                    paddingHor: 25,
+                    paddingVer: 4,
+                    fontWeight: FontWeight.w500,
+                    // Đảm bảo padding giống Confirm
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
+        // actionsPadding: EdgeInsets.symmetric(
+        //   horizontal: Resizable.size(context, 12),
+        //   vertical: Resizable.size(context, 12),
+        // ),
+        // actions: [
+        //
+        // ],
       ),
     );
   }
 
   static Future<bool> showConfirmDialog(
-      BuildContext context,
-      String title,
-      String message, {
-        Color mainColor = ColorConfig.primary2,
-        Color confirmColor = ColorConfig.error,
-        Color cancelColor = ColorConfig.primary3,
-      }) {
+    BuildContext context,
+    String title,
+    String message, {
+    Color mainColor = ColorConfig.primary2,
+    Color confirmColor = ColorConfig.error,
+    Color cancelColor = ColorConfig.primary3,
+  }) {
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -115,7 +121,7 @@ class DialogUtils {
         ),
         contentPadding: EdgeInsets.all(Resizable.size(context, 25)),
         content: SizedBox(
-          width: Resizable.size(context, 436),
+          width: Resizable.size(context, 450),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,

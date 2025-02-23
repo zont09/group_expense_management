@@ -52,12 +52,69 @@ class LoginMobileView extends StatelessWidget {
                     // ),
                     // SizedBox(height: Resizable.size(context, 15)),
                     UsernameTextField(
-                        hintText: AppText.textHintUsername.text,
-                        icon: Icons.account_circle_outlined, controller: cubit.conUsername,),
+                      hintText: AppText.textHintUsername.text,
+                      icon: Icons.account_circle_outlined,
+                      controller: cubit.conUsername,
+                      isError: cubit.errorUsername > 0,
+                      changeError: (v) {
+                        cubit.errorUsername = v;
+                        cubit.EMIT();
+                      },
+                    ),
+                    if (cubit.errorUsername > 0)
+                      SizedBox(height: Resizable.size(context, 3)),
+                    if (cubit.errorUsername == 1)
+                      Padding(
+                        padding:
+                        EdgeInsets.only(left: Resizable.size(context, 12)),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(AppText.textPleaseDoNotLeaveItBlank.text,
+                              style: TextStyle(
+                                  fontSize: Resizable.font(context, 14),
+                                  fontWeight: FontWeight.w300,
+                                  color: ColorConfig.error)),
+                        ),
+                      ),
+                    if (cubit.errorUsername == 2)
+                      Padding(
+                        padding:
+                        EdgeInsets.only(left: Resizable.size(context, 12)),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(AppText.textInvalidEmail.text,
+                              style: TextStyle(
+                                  fontSize: Resizable.font(context, 14),
+                                  fontWeight: FontWeight.w300,
+                                  color: ColorConfig.error)),
+                        ),
+                      ),
                     SizedBox(height: Resizable.size(context, 10)),
                     PasswordTextField(
-                        hintText: AppText.textHintPassword.text,
-                        icon: Icons.lock_outline, controller: cubit.conPassword,),
+                      hintText: AppText.textHintPassword.text,
+                      icon: Icons.lock_outline,
+                      controller: cubit.conPassword,
+                      isError: cubit.errorPassword > 0,
+                      changeError: (v) {
+                        cubit.errorPassword = v;
+                        cubit.EMIT();
+                      },
+                    ),
+                    if (cubit.errorPassword > 0)
+                      SizedBox(height: Resizable.size(context, 3)),
+                    if (cubit.errorPassword == 1)
+                      Padding(
+                        padding:
+                        EdgeInsets.only(left: Resizable.size(context, 12)),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(AppText.textPleaseDoNotLeaveItBlank.text,
+                              style: TextStyle(
+                                  fontSize: Resizable.font(context, 14),
+                                  fontWeight: FontWeight.w300,
+                                  color: ColorConfig.error)),
+                        ),
+                      ),
                     SizedBox(height: Resizable.size(context, 5)),
                     Align(
                       alignment: Alignment.centerRight,
@@ -73,7 +130,43 @@ class LoginMobileView extends StatelessWidget {
                     SizedBox(height: Resizable.size(context, 15)),
                     ZButton(
                         title: AppText.textLogin.text,
-                        onPressed: () {},
+                        onPressed: () async {
+                          final isError = await cubit.checkError();
+                          if (isError) return;
+                          if (context.mounted) {
+                            DialogUtils.showLoadingDialog(context);
+                          }
+
+                          String loginStatus = "";
+
+                          if (context.mounted) {
+                            loginStatus =
+                            await cubit.signInWithEmailAndPassword(
+                                cubit.conUsername.text,
+                                cubit.conPassword.text,
+                                context);
+                          }
+
+                          if (context.mounted) {
+                            Navigator.of(context).pop();
+                          }
+
+                          if (loginStatus == "success" && context.mounted) {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => OverviewMainView(),
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (loginStatus != "success" && context.mounted) {
+                            DialogUtils.showResultDialog(
+                                context, AppText.textLoginFail.text,
+                                loginStatus);
+                            return;
+                          }
+                        },
                         paddingHor: 20,
                         sizeTitle: 16,
                         fontWeight: FontWeight.w600,
@@ -90,9 +183,8 @@ class LoginMobileView extends StatelessWidget {
                                 color: ColorConfig.textColor7)),
                         InkWell(
                           onTap: () {
-                            Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) =>
-                                    SignUpMobileView()));
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => SignUpMobileView()));
                           },
                           child: Text(AppText.textCreateAccountNow.text,
                               style: TextStyle(

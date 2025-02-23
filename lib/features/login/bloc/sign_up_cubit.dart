@@ -35,6 +35,7 @@ class SignUpCubit extends Cubit<int> {
       errorRePassword = 0;
     }
     EMIT();
+    return errorRePassword > 0 || errorPassword > 0 || errorUsername > 0;
   }
 
   bool isValidEmail(String email) {
