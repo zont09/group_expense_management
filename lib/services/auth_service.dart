@@ -83,13 +83,26 @@ class AuthService {
           userCredential.user, ""); // Đăng nhập thành công, không có lỗi
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        return Pair(null, AppText.textEmailNoSignIn.text);
+        return Pair(null, AppText.textEmailNoSignUp.text);
       } else if (e.code == 'wrong-password') {
         return Pair(null, AppText.textPasswordIncorrect.text);
       } else if (e.code == 'too-many-requests') {
         return Pair(null, AppText.textNoSpamAndTryAgain.text);
       } else {
         return Pair(null, 'Đăng nhập thất bại: ${e.message}');
+      }
+    }
+  }
+
+  Future<String?> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return AppText.textEmailNoSignUp.text;
+      } else {
+        return 'Lỗi: ${e.message}';
       }
     }
   }

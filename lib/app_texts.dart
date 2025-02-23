@@ -1,4 +1,6 @@
 enum AppText {
+  titleResetPasswordSuccess,
+
   textRouteLogin,
   textRouteChat,
   textRouteOverview,
@@ -17,13 +19,15 @@ enum AppText {
   textEmailAlreadyInUse,
   textHasErrorAndTryAgain,
   textPleaseVerify,
-  textEmailNoSignIn,
+  textEmailNoSignUp,
   textNoSpamAndTryAgain,
   textLoginFail,
+  textResetPasswordSuccess,
 
   textHintUsername,
   textHintPassword,
   textHintReEnterPassword,
+  textHintEmailForgotPassword,
   textPleaseDoNotLeaveItBlank,
   textInvalidEmail,
   textRePasswordNotMatch,
@@ -32,6 +36,7 @@ enum AppText {
   btnConfirm,
   btnCancel,
   btnOk,
+  btnSendRequest,
 }
 
 Map<AppText, String> texts = {
@@ -39,6 +44,8 @@ Map<AppText, String> texts = {
   AppText.textRouteChat: "/chat",
   AppText.textRouteOverview: "/overview",
   AppText.textRouteProfile: "/profile",
+
+  AppText.titleResetPasswordSuccess: "Đặt lại thành công",
 
   AppText.textLogin: "Đăng nhập",
   AppText.textSignUp: "Đăng ký",
@@ -57,10 +64,12 @@ Map<AppText, String> texts = {
   AppText.textEmailAlreadyInUse: "Email này đã được sử dụng, vui lòng đăng nhập hoặc thử đăng ký bằng một email khác",
   AppText.textHasErrorAndTryAgain: "Đã có lỗi xảy ra, vui lòng thử lại",
   AppText.textPleaseVerify: 'Vui lòng xác nhận email trước khi đăng nhập',
-  AppText.textEmailNoSignIn: 'Email chưa được đăng ký',
+  AppText.textEmailNoSignUp: 'Email chưa được đăng ký',
   AppText.textPasswordIncorrect: 'Mật khẩu không chính xác',
   AppText.textNoSpamAndTryAgain: 'Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau',
   AppText.textLoginFail: "Đăng nhập thất bại",
+  AppText.textHintEmailForgotPassword: "Nhập email muốn lấy lại mật khẩu",
+  AppText.textResetPasswordSuccess: "Mật khẩu đã được đặt lại thành công, vui lòng kiểm tra email để đặt lại mật khẩu",
 
   AppText.textHintUsername: "Nhập email đăng nhập",
   AppText.textHintPassword: "Nhập mật khẩu",
@@ -68,6 +77,7 @@ Map<AppText, String> texts = {
   AppText.btnConfirm: "Xác nhận",
   AppText.btnCancel: "Huỷ",
   AppText.btnOk: "Ok",
+  AppText.btnSendRequest: "Gửi yêu cầu",
 };
 
 extension AppTexts on AppText {
