@@ -8,7 +8,11 @@ class MainCubit extends Cubit<int> {
   static MainCubit fromContext(BuildContext context) =>
       BlocProvider.of<MainCubit>(context);
 
-  UserModel user = UserModel();
+  UserModel user = UserModel(name: "None");
+
+  initData() async {
+    user = UserModel(name: "Pham Ngoc Thinh", email: "ngocthinh2209@gmail.com");
+  }
 
   changeUser(UserModel u) {
     user = u;

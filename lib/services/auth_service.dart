@@ -4,8 +4,11 @@ import 'package:group_expense_management/app_texts.dart';
 import 'package:group_expense_management/models/pair.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  static User? get currentUser => _auth.currentUser;
+
+  static bool get isLoggedIn => currentUser != null;
 
   // Đăng nhập bằng Google
   Future<User?> signInWithGoogle() async {

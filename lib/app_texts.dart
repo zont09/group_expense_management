@@ -23,6 +23,7 @@ enum AppText {
   textNoSpamAndTryAgain,
   textLoginFail,
   textResetPasswordSuccess,
+  textProfile,
 
   textHintUsername,
   textHintPassword,
@@ -37,6 +38,7 @@ enum AppText {
   btnCancel,
   btnOk,
   btnSendRequest,
+  btnSignOut,
 }
 
 Map<AppText, String> texts = {
@@ -70,7 +72,7 @@ Map<AppText, String> texts = {
   AppText.textLoginFail: "Đăng nhập thất bại",
   AppText.textHintEmailForgotPassword: "Nhập email muốn lấy lại mật khẩu",
   AppText.textResetPasswordSuccess: "Mật khẩu đã được đặt lại thành công, vui lòng kiểm tra email để đặt lại mật khẩu",
-
+  AppText.textProfile: "Thông tin cá nhân",
   AppText.textHintUsername: "Nhập email đăng nhập",
   AppText.textHintPassword: "Nhập mật khẩu",
 
@@ -78,6 +80,7 @@ Map<AppText, String> texts = {
   AppText.btnCancel: "Huỷ",
   AppText.btnOk: "Ok",
   AppText.btnSendRequest: "Gửi yêu cầu",
+  AppText.btnSignOut: "Đăng xuất",
 };
 
 extension AppTexts on AppText {

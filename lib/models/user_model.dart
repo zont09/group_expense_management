@@ -5,6 +5,7 @@ class UserModel {
   final String name;
   final String email;
   final String phone;
+  final String avatar;
   final List<String> wallets;
   final List<String> groups;
   final bool enable;
@@ -15,6 +16,7 @@ class UserModel {
     this.name = '',
     this.email = '',
     this.phone = '',
+    this.avatar = '',
     this.wallets = const [],
     this.groups = const [],
     this.enable = true,
@@ -26,6 +28,7 @@ class UserModel {
     String? name,
     String? email,
     String? phone,
+    String? avatar,
     List<String>? wallets,
     List<String>? groups,
     bool? enable,
@@ -35,6 +38,7 @@ class UserModel {
       name: name ?? this.name,
       email: email ?? this.email,
       phone: phone ?? this.phone,
+      avatar: avatar ?? this.avatar,
       wallets: wallets ?? List.from(this.wallets),
       groups: groups ?? List.from(this.groups),
       enable: enable ?? this.enable,
@@ -48,6 +52,7 @@ class UserModel {
       'name': name,
       'email': email,
       'phone': phone,
+      'avatar': avatar,
       'wallets': wallets,
       'groups': groups,
       'enable': enable,
@@ -61,6 +66,7 @@ class UserModel {
       name: json['name'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
+      avatar: json['avatar'] ?? '',
       wallets: List<String>.from(json['wallets'] ?? []),
       groups: List<String>.from(json['groups'] ?? []),
       enable: json['enable'] ?? true,
@@ -80,6 +86,7 @@ class UserModel {
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
+      avatar: data['avatar'] ?? '',
       wallets: List<String>.from(data['wallets'] ?? []),
       groups: List<String>.from(data['groups'] ?? []),
       enable: data['enable'] ?? true,

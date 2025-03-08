@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/features/login/login_main_view.dart';
+import 'package:group_expense_management/features/overview/views/overview_main_view.dart';
 import 'package:group_expense_management/main_cubit.dart';
+import 'package:group_expense_management/services/auth_service.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -10,7 +12,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(BlocProvider(
+    create: (context) => MainCubit()..initData(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -26,13 +31,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: BlocProvider(
-        create: (context) => MainCubit(),
-        child: BlocBuilder<MainCubit, int>(
-          builder: (c, s) {
-            return LoginMainView();
-          },
-        ),
+      home: BlocBuilder<MainCubit, int>(
+        builder: (c, s) {
+          if (AuthService.isLoggedIn) {
+            return const OverviewMainView();
+          }
+          return const LoginMainView();
+        },
       ),
     );
   }
