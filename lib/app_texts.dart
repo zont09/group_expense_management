@@ -1,5 +1,6 @@
 enum AppText {
   titleResetPasswordSuccess,
+  titleYourGroup,
 
   textRouteLogin,
   textRouteChat,
@@ -24,6 +25,10 @@ enum AppText {
   textLoginFail,
   textResetPasswordSuccess,
   textProfile,
+  textOwner,
+  textMembers,
+  textActive,
+  textInactive,
 
   textHintUsername,
   textHintPassword,
@@ -48,6 +53,7 @@ Map<AppText, String> texts = {
   AppText.textRouteProfile: "/profile",
 
   AppText.titleResetPasswordSuccess: "Đặt lại thành công",
+  AppText.titleYourGroup: "Nhóm của bạn",
 
   AppText.textLogin: "Đăng nhập",
   AppText.textSignUp: "Đăng ký",
@@ -75,6 +81,10 @@ Map<AppText, String> texts = {
   AppText.textProfile: "Thông tin cá nhân",
   AppText.textHintUsername: "Nhập email đăng nhập",
   AppText.textHintPassword: "Nhập mật khẩu",
+  AppText.textOwner: 'Người tạo',
+  AppText.textMembers: "Thành viên",
+  AppText.textActive: "Đang hoạt động",
+  AppText.textInactive: "Ngưng hoạt động",
 
   AppText.btnConfirm: "Xác nhận",
   AppText.btnCancel: "Huỷ",

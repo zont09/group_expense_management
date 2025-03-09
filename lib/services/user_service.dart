@@ -22,7 +22,7 @@ class UserService {
     await _userRepository.addUser(model);
   }
 
-  Future<void> updateMeeting(UserModel model) async {
+  Future<void> updateUser(UserModel model) async {
     await _userRepository.updateUser(model);
   }
 }

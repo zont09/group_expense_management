@@ -36,6 +36,9 @@ class ColorConfig {
   static const Color primary6 = Color(0xFFE4815A);
   static const Color primary7 = Color(0xFFE6EFF5);
 
+  static const Color active = Color(0xFF03c900);
+  static const Color inactive = Color(0xFFff2209);
+
   static const LinearGradient gradientPrimary1 = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
@@ -80,7 +83,7 @@ class ColorConfig {
 
   static const Color mainText = Color(0xFF343C6A);
   static const Shadow textShadow = Shadow(
-    offset: Offset(0, 4),
+    offset: Offset(0, 2),
     blurRadius: 4,
     color: Color(0x1A000000),
   );

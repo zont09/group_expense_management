@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/features/login/login_main_view.dart';
 import 'package:group_expense_management/features/overview/views/overview_main_view.dart';
+import 'package:group_expense_management/features/splash/splash_screen.dart';
 import 'package:group_expense_management/main_cubit.dart';
 import 'package:group_expense_management/services/auth_service.dart';
 import 'firebase_options.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocBuilder<MainCubit, int>(
         builder: (c, s) {
+          if(s == 0) {
+            return const SplashScreen();
+          }
           if (AuthService.isLoggedIn) {
             return const OverviewMainView();
           }
