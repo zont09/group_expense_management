@@ -29,59 +29,73 @@ class WalletSummary extends StatelessWidget {
               onPressed: () {
                 actionSeeAll();
               },
-              child: Text('Xem thêm',
-                  style: TextStyle(
-                      fontSize: Resizable.font(context, 12),
-                      fontWeight: FontWeight.w600,
-                      // color: ColorConfig.textColor6,
-                      shadows: const [ColorConfig.textShadow])),
+              child: Text('Xem thêm', style: TextStyle(
+                  fontSize: Resizable.font(context, 12),
+                  fontWeight: FontWeight.w600,
+                  // color: ColorConfig.textColor6,
+                  shadows: const [ColorConfig.textShadow])),
             ),
           ],
         ),
         const SizedBox(height: 8),
         SizedBox(
-          height: 120,
+          height: 100,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: wallets.length,
             itemBuilder: (context, index) {
               final wallet = wallets[index];
-              return Container(
-                width: 200,
-                margin: const EdgeInsets.only(right: 12),
-                child: Card(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          wallet.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          NumberFormat.currency(locale: 'vi_VN', symbol: 'đ')
-                              .format(wallet.amount),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
+              return AspectRatio(
+                aspectRatio: 2,
+                  child: WalletCardItem(wallet: wallet));
             },
           ),
         ),
       ],
+    );
+  }
+}
+
+class WalletCardItem extends StatelessWidget {
+  const WalletCardItem({super.key, required this.wallet});
+
+  final WalletModel wallet;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: ColorConfig.primary3,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: const [
+          ColorConfig.boxShadow2,
+        ],
+      ),
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.only(right: 8, top: 8, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(wallet.name,
+              style: TextStyle(
+                  fontSize: Resizable.size(context, 16),
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis),
+          const SizedBox(height: 4),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+                NumberFormat.currency(locale: 'vi_VN', symbol: 'đ')
+                    .format(wallet.amount),
+                style: TextStyle(
+                    fontSize: Resizable.size(context, 18),
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white)),
+          ),
+        ],
+      ),
     );
   }
 }

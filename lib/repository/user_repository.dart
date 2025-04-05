@@ -61,8 +61,8 @@ class UserRepository {
   Future<void> updateUser(UserModel model) async {
     try {
       await fireStore
-          .collection('daily_pls_meeting')
-          .doc("daily_pls_meeting_${model.id}")
+          .collection('users')
+          .doc("users_${model.id}")
           .set({
         ...model.toJson(),
         "updateAt": DateTime.now(),
