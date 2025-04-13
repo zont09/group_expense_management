@@ -3,14 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class CategoryModel {
   final String id;
   final String title;
-  final String type;
+  final int type;
   final bool enable;
 
   // Constructor với giá trị mặc định
   CategoryModel({
     this.id = '',
     this.title = '',
-    this.type = '',
+    this.type = 0,
     this.enable = true,
   });
 
@@ -18,7 +18,7 @@ class CategoryModel {
   CategoryModel copyWith({
     String? id,
     String? title,
-    String? type,
+    int? type,
     bool? enable,
   }) {
     return CategoryModel(
@@ -44,7 +44,7 @@ class CategoryModel {
     return CategoryModel(
       id: json['id'] ?? '',
       title: json['title'] ?? '',
-      type: json['type'] ?? '',
+      type: json['type'] ?? 0,
       enable: json['enable'] ?? true,
     );
   }
@@ -60,7 +60,7 @@ class CategoryModel {
     return CategoryModel(
       id: data['id'] ?? snapshot.id,
       title: data['title'] ?? '',
-      type: data['type'] ?? '',
+      type: data['type'] ?? 0,
       enable: data['enable'] ?? true,
     );
   }

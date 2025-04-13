@@ -6,15 +6,21 @@ class GroupModel {
   final String avatar;
   final String owner;
   final List<String> members;
+  final List<String> admins;
+  final List<String> managers;
+  final List<String> viewers;
   final bool enable;
 
-  // Constructor với giá trị mặc định
+  // Constructor với đầy đủ tham số và giá trị mặc định
   GroupModel({
     this.id = '',
     this.name = '',
     this.avatar = '',
     this.owner = '',
     this.members = const [],
+    this.admins = const [],
+    this.managers = const [],
+    this.viewers = const [],
     this.enable = true,
   });
 
@@ -25,6 +31,9 @@ class GroupModel {
     String? avatar,
     String? owner,
     List<String>? members,
+    List<String>? admins,
+    List<String>? managers,
+    List<String>? viewers,
     bool? enable,
   }) {
     return GroupModel(
@@ -33,6 +42,9 @@ class GroupModel {
       avatar: avatar ?? this.avatar,
       owner: owner ?? this.owner,
       members: members ?? List.from(this.members),
+      admins: admins ?? List.from(this.admins),
+      managers: managers ?? List.from(this.managers),
+      viewers: viewers ?? List.from(this.viewers),
       enable: enable ?? this.enable,
     );
   }
@@ -45,6 +57,9 @@ class GroupModel {
       'avatar': avatar,
       'owner': owner,
       'members': members,
+      'admins': admins,
+      'managers': managers,
+      'viewers': viewers,
       'enable': enable,
     };
   }
@@ -57,6 +72,9 @@ class GroupModel {
       avatar: json['avatar'] ?? '',
       owner: json['owner'] ?? '',
       members: List<String>.from(json['members'] ?? []),
+      admins: List<String>.from(json['admins'] ?? []),
+      managers: List<String>.from(json['managers'] ?? []),
+      viewers: List<String>.from(json['viewers'] ?? []),
       enable: json['enable'] ?? true,
     );
   }
@@ -75,12 +93,15 @@ class GroupModel {
       avatar: data['avatar'] ?? '',
       owner: data['owner'] ?? '',
       members: List<String>.from(data['members'] ?? []),
+      admins: List<String>.from(data['admins'] ?? []),
+      managers: List<String>.from(data['managers'] ?? []),
+      viewers: List<String>.from(data['viewers'] ?? []),
       enable: data['enable'] ?? true,
     );
   }
 
   @override
   String toString() {
-    return 'GroupModel(id: $id, name: $name, avatar: $avatar, owner: $owner, members: $members, enable: $enable)';
+    return 'GroupModel(id: $id, name: $name, avatar: $avatar, owner: $owner, members: $members, admins: $admins, managers: $managers, viewers: $viewers, enable: $enable)';
   }
 }
