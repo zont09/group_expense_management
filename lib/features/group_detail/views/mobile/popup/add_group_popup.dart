@@ -125,6 +125,8 @@ class AddGroupPopup extends StatelessWidget {
                               .id,
                           name: cubit.conName.text,
                           members: members,
+                          managers: [mC.user.id],
+                          owner: mC.user.id,
                         );
                         onAdd(group);
                         Navigator.of(context).pop();

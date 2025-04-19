@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/configs/color_configs.dart';
 import 'package:group_expense_management/features/group_detail/bloc/group_detail_cubit.dart';
-import 'package:group_expense_management/features/group_detail/views/mobile/add_transaction_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/overview/overview_view.dart';
+import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_transaction_popup.dart';
+import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_wallet_popup.dart';
 import 'package:group_expense_management/models/group_model.dart';
 import 'package:group_expense_management/utils/dialog_utils.dart';
 import 'package:group_expense_management/utils/resizable_utils.dart';
@@ -45,21 +46,11 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-      GroupDetailCubit(widget.group)
-        ..initData(),
+      create: (context) => GroupDetailCubit(widget.group)..initData(),
       child: BlocBuilder<GroupDetailCubit, int>(
         builder: (c, s) {
           var cubit = BlocProvider.of<GroupDetailCubit>(c);
-          if (s == 0) {
-            return Column(
-              children: [
-                const SizedBox(height: 20),
-                Center(child: CircularProgressIndicator(
-                  color: ColorConfig.primary2,),)
-              ],
-            );
-          }
+
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
@@ -88,11 +79,26 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                 tabs: _tabs.map((tab) => Tab(text: tab)).toList(),
               ),
             ),
-            body: TabBarView(
+            body: s == 0 ? Container(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: ColorConfig.primary2,
+                    ),
+                  )
+                ],
+              ),
+            ) : TabBarView(
               controller: _tabController,
               children: [
                 OverviewView(
-                  group: widget.group, tabController: _tabController,),
+                  group: widget.group,
+                  tabController: _tabController,
+                  cubit: cubit,
+                ),
                 _buildTransactionsTab(),
                 _buildBudgetTab(),
                 _buildSavingsTab(),
@@ -126,7 +132,9 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                 onTap: () {
                   Navigator.pop(context);
                   DialogUtils.showAlertDialog(context,
-                      child: AddTransactionPopup(wallets: cubit.wallets ?? [],
+                      child: AddTransactionPopup(
+                          group: widget.group,
+                          wallets: cubit.wallets ?? [],
                           categories: cubit.categories ?? [],
                           onAdd: (v) {
                             cubit.addTransaction(v);
@@ -138,7 +146,12 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                 title: const Text('Add Wallet'),
                 onTap: () {
                   Navigator.pop(context);
-                  _showAddWalletDialog(context);
+                  DialogUtils.showAlertDialog(context,
+                      child: AddWalletPopup(
+                          group: widget.group,
+                          onAdd: (v) {
+                            cubit.addWallet(v);
+                          }));
                 },
               ),
               ListTile(
@@ -187,14 +200,14 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
               // Mock transaction data
               final bool isExpense = index % 3 != 0;
               final String title =
-              isExpense ? 'Expense ${index + 1}' : 'Income ${index + 1}';
+                  isExpense ? 'Expense ${index + 1}' : 'Income ${index + 1}';
               final String amount = isExpense ? '- 150,000 đ' : '+ 300,000 đ';
               final Color amountColor = isExpense ? Colors.red : Colors.green;
 
               return ListTile(
                 leading: CircleAvatar(
                   backgroundColor:
-                  isExpense ? Colors.red[100] : Colors.green[100],
+                      isExpense ? Colors.red[100] : Colors.green[100],
                   child: Icon(
                     isExpense ? Icons.arrow_downward : Icons.arrow_upward,
                     color: isExpense ? Colors.red : Colors.green,
@@ -202,11 +215,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                 ),
                 title: Text(title),
                 subtitle: Text(
-                    '${DateTime
-                        .now()
-                        .day - (index % 30)}/${DateTime
-                        .now()
-                        .month}/2023'),
+                    '${DateTime.now().day - (index % 30)}/${DateTime.now().month}/2023'),
                 trailing: Text(
                   amount,
                   style: TextStyle(
@@ -240,10 +249,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                 children: [
                   Text(
                     'Monthly Budget',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -299,10 +305,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
           const SizedBox(height: 24),
           Text(
             'Budget Categories',
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleMedium,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 16),
           _buildBudgetCategory('Food', 1500000, 2000000, Colors.orange),
@@ -325,8 +328,8 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
     );
   }
 
-  Widget _buildBudgetCategory(String name, double spent, double total,
-      Color color) {
+  Widget _buildBudgetCategory(
+      String name, double spent, double total, Color color) {
     final percentage = spent / total;
     return Card(
       child: Padding(
@@ -405,10 +408,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
         children: [
           Text(
             'Saving Goals',
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleLarge,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 16),
           ListView.builder(
@@ -447,8 +447,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Target date: ${DateFormat('dd/MM/yyyy').format(
-                            goal['date'] as DateTime)}',
+                        'Target date: ${DateFormat('dd/MM/yyyy').format(goal['date'] as DateTime)}',
                         style: TextStyle(
                           color: Colors.grey[600],
                         ),
@@ -480,9 +479,8 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton.icon(
-                            onPressed: () =>
-                                _showAddContributionDialog(
-                                    context, goal['title'] as String),
+                            onPressed: () => _showAddContributionDialog(
+                                context, goal['title'] as String),
                             icon: const Icon(Icons.add),
                             label: const Text('Contribute'),
                             style: ElevatedButton.styleFrom(
@@ -533,10 +531,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
         children: [
           Text(
             'Group Members',
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleLarge,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 16),
           ListView.builder(
@@ -553,9 +548,8 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                 subtitle: Text(member['role'] as String),
                 trailing: IconButton(
                   icon: const Icon(Icons.more_vert),
-                  onPressed: () =>
-                      _showMemberOptions(context,
-                          member['name'] as String, member['role'] as String),
+                  onPressed: () => _showMemberOptions(context,
+                      member['name'] as String, member['role'] as String),
                 ),
               );
             },
@@ -834,7 +828,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                   ),
                   TextFormField(
                     decoration:
-                    const InputDecoration(labelText: 'Initial Amount'),
+                        const InputDecoration(labelText: 'Initial Amount'),
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -851,7 +845,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                   ),
                   TextFormField(
                     decoration:
-                    const InputDecoration(labelText: 'Note (Optional)'),
+                        const InputDecoration(labelText: 'Note (Optional)'),
                     onSaved: (value) {
                       note = value ?? '';
                     },
@@ -940,7 +934,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                   ),
                   TextFormField(
                     decoration:
-                    const InputDecoration(labelText: 'Target Amount'),
+                        const InputDecoration(labelText: 'Target Amount'),
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -1149,7 +1143,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                   ),
                   TextFormField(
                     decoration:
-                    const InputDecoration(labelText: 'Budget Amount'),
+                        const InputDecoration(labelText: 'Budget Amount'),
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -1347,8 +1341,8 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
     );
   }
 
-  void _showMemberOptions(BuildContext context, String memberName,
-      String role) {
+  void _showMemberOptions(
+      BuildContext context, String memberName, String role) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1388,8 +1382,8 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
     );
   }
 
-  void _showChangeRoleDialog(BuildContext context, String memberName,
-      String currentRole) {
+  void _showChangeRoleDialog(
+      BuildContext context, String memberName, String currentRole) {
     String newRole = currentRole;
 
     showDialog(

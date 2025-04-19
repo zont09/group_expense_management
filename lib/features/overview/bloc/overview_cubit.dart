@@ -10,6 +10,7 @@ class OverviewCubit extends Cubit<int> {
   List<GroupModel> groups = [];
 
   initData(String uid) async {
+    uid = "oZbEeh0GJyk7I8otkySf";
     groups.clear();
     final data = await _groupService.getAllGroupForUser(uid);
     groups.addAll(data);

@@ -4,6 +4,7 @@ class TransactionModel {
   final String id;
   final String title;
   final String description;
+  final double amount;
   final DateTime date;
   final String wallet;
   final String user;
@@ -19,6 +20,7 @@ class TransactionModel {
     this.id = '',
     this.title = '',
     this.description = '',
+    this.amount = 0,
     DateTime? date,
     this.wallet = '',
     this.user = '',
@@ -28,8 +30,7 @@ class TransactionModel {
     this.enable = true,
     DateTime? createAt,
     DateTime? updateAt,
-  }) :
-        this.date = date ?? DateTime.now(),
+  })  : this.date = date ?? DateTime.now(),
         this.createAt = createAt ?? DateTime.now(),
         this.updateAt = updateAt ?? DateTime.now();
 
@@ -38,6 +39,7 @@ class TransactionModel {
     String? id,
     String? title,
     String? description,
+    double? amount,
     DateTime? date,
     String? wallet,
     String? user,
@@ -52,6 +54,7 @@ class TransactionModel {
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
+      amount: amount ?? this.amount,
       date: date ?? this.date,
       wallet: wallet ?? this.wallet,
       user: user ?? this.user,
@@ -70,6 +73,7 @@ class TransactionModel {
       'id': id,
       'title': title,
       'description': description,
+      'amount': amount,
       'date': date.toIso8601String(),
       'wallet': wallet,
       'user': user,
@@ -88,6 +92,7 @@ class TransactionModel {
       id: json['id'] ?? '',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
+      amount: json['amount'] ?? 0,
       date: json['date'] != null ? DateTime.parse(json['date']) : null,
       wallet: json['wallet'] ?? '',
       user: json['user'] ?? '',
@@ -95,8 +100,10 @@ class TransactionModel {
       category: json['category'] ?? '',
       isRepeat: json['isRepeat'] ?? 'no',
       enable: json['enable'] ?? true,
-      createAt: json['createAt'] != null ? DateTime.parse(json['createAt']) : null,
-      updateAt: json['updateAt'] != null ? DateTime.parse(json['updateAt']) : null,
+      createAt:
+          json['createAt'] != null ? DateTime.parse(json['createAt']) : null,
+      updateAt:
+          json['updateAt'] != null ? DateTime.parse(json['updateAt']) : null,
     );
   }
 
@@ -112,10 +119,11 @@ class TransactionModel {
       id: data['id'] ?? snapshot.id,
       title: data['title'] ?? '',
       description: data['description'] ?? '',
+      amount: data['amount'] ?? 0,
       date: data['date'] != null
           ? (data['date'] is Timestamp
-          ? (data['date'] as Timestamp).toDate()
-          : DateTime.parse(data['date']))
+              ? (data['date'] as Timestamp).toDate()
+              : DateTime.parse(data['date']))
           : null,
       wallet: data['wallet'] ?? '',
       user: data['user'] ?? '',
@@ -125,13 +133,13 @@ class TransactionModel {
       enable: data['enable'] ?? true,
       createAt: data['createAt'] != null
           ? (data['createAt'] is Timestamp
-          ? (data['createAt'] as Timestamp).toDate()
-          : DateTime.parse(data['createAt']))
+              ? (data['createAt'] as Timestamp).toDate()
+              : DateTime.parse(data['createAt']))
           : null,
       updateAt: data['updateAt'] != null
           ? (data['updateAt'] is Timestamp
-          ? (data['updateAt'] as Timestamp).toDate()
-          : DateTime.parse(data['updateAt']))
+              ? (data['updateAt'] as Timestamp).toDate()
+              : DateTime.parse(data['updateAt']))
           : null,
     );
   }
@@ -141,4 +149,3 @@ class TransactionModel {
     return 'TransactionModel(id: $id, title: $title, description: $description, date: $date, wallet: $wallet, user: $user, group: $group, category: $category, isRepeat: $isRepeat, enable: $enable, createAt: $createAt, updateAt: $updateAt)';
   }
 }
-

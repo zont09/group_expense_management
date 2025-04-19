@@ -3,12 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/app_texts.dart';
 import 'package:group_expense_management/configs/color_configs.dart';
 import 'package:group_expense_management/features/group_detail/group_detail_main_view.dart';
-import 'package:group_expense_management/features/group_detail/views/mobile/add_group_popup.dart';
+import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_group_popup.dart';
 import 'package:group_expense_management/features/overview/bloc/overview_cubit.dart';
 import 'package:group_expense_management/features/overview/widgets/card_group.dart';
 import 'package:group_expense_management/features/profile/views/mobile/profile_mobile_view.dart';
 import 'package:group_expense_management/main_cubit.dart';
-import 'package:group_expense_management/models/group_model.dart';
 import 'package:group_expense_management/utils/dialog_utils.dart';
 import 'package:group_expense_management/utils/resizable_utils.dart';
 
