@@ -26,6 +26,8 @@ class GroupDetailCubit extends Cubit<int> {
     transactions = await _transactionService.getAllTransactionByGroup(group.id);
     wallets = await _walletService.getAllWalletByGroup(group.id);
     categories = await _categoryService.getAllCategory();
+
+    transactions!.sort((a, b) => b.date.compareTo(a.date));
     EMIT();
   }
 

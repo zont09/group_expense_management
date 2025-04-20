@@ -39,6 +39,9 @@ class ColorConfig {
   static const Color active = Color(0xFF03c900);
   static const Color inactive = Color(0xFFff2209);
 
+  static const Color income = Color(0xFF32a852);
+  static const Color outcome = Color(0xFFff7300);
+
   static const LinearGradient gradientPrimary1 = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,

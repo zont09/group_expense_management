@@ -27,7 +27,7 @@ class AddTransactionCubit extends Cubit<int> {
         title: conTitle.text,
         amount: double.parse(conAmount.text),
         description: conDes.text,
-        category: category!.id,
+        category: "${category!.id}_${category!.type}",
         wallet: wallet!.id,
         user: user.id,
         group: group.id,

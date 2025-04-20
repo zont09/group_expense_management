@@ -88,6 +88,7 @@ class WalletModel {
       note: data['note'] ?? '',
       currency: data['currency'] ?? 'VND',
       user: data['user'] ?? '',
+      group: data['group'] ?? '',
       enable: data['enable'] ?? true,
     );
   }

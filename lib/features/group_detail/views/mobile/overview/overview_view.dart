@@ -34,7 +34,7 @@ class OverviewView extends StatelessWidget {
               }),
           const SizedBox(height: 24),
           RecentTransaction(
-              transactions: [],
+              transactions: cubit.transactions ?? [],
               actionSeeAll: () {
                 tabController.animateTo(1);
               }),

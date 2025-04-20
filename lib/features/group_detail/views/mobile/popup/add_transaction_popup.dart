@@ -20,12 +20,14 @@ class AddTransactionPopup extends StatelessWidget {
       required this.group,
       required this.wallets,
       required this.categories,
-      required this.onAdd});
+      required this.onAdd,
+      required this.onUpdateWallet});
 
   final GroupModel group;
   final List<WalletModel> wallets;
   final List<CategoryModel> categories;
   final Function(TransactionModel) onAdd;
+  final Function(WalletModel) onUpdateWallet;
 
   @override
   Widget build(BuildContext context) {
@@ -110,12 +112,14 @@ class AddTransactionPopup extends StatelessWidget {
                                 "Ví không còn đủ số dư để thực hiện giao dịch");
                             return;
                           }
-                          await WalletService.instance.updateWallet(
-                              wallet.copyWith(
-                                  amount: wallet.amount -
-                                      double.parse(cubit.conAmount.text)));
+                          debugPrint("=====> wallet: ${wallet.id} - ${wallet.group}");
+                          final updWallet =  wallet.copyWith(
+                              amount: wallet.amount -
+                                  double.parse(cubit.conAmount.text));
+                          await WalletService.instance.updateWallet(updWallet);
                           final trans = await cubit.addTransaction();
                           onAdd(trans);
+                          onUpdateWallet(wallet);
                           if(context.mounted) {
                             Navigator.of(context).pop();
                           }

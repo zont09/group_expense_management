@@ -79,32 +79,34 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                 tabs: _tabs.map((tab) => Tab(text: tab)).toList(),
               ),
             ),
-            body: s == 0 ? Container(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  Center(
-                    child: CircularProgressIndicator(
-                      color: ColorConfig.primary2,
+            body: s == 0
+                ? Container(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Center(
+                          child: CircularProgressIndicator(
+                            color: ColorConfig.primary2,
+                          ),
+                        )
+                      ],
                     ),
                   )
-                ],
-              ),
-            ) : TabBarView(
-              controller: _tabController,
-              children: [
-                OverviewView(
-                  group: widget.group,
-                  tabController: _tabController,
-                  cubit: cubit,
-                ),
-                _buildTransactionsTab(),
-                _buildBudgetTab(),
-                _buildSavingsTab(),
-                _buildMembersTab(),
-              ],
-            ),
+                : TabBarView(
+                    controller: _tabController,
+                    children: [
+                      OverviewView(
+                        group: widget.group,
+                        tabController: _tabController,
+                        cubit: cubit,
+                      ),
+                      _buildTransactionsTab(),
+                      _buildBudgetTab(),
+                      _buildSavingsTab(),
+                      _buildMembersTab(),
+                    ],
+                  ),
             floatingActionButton: _buildFloatingActionButton(cubit),
           );
         },
@@ -133,12 +135,16 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                   Navigator.pop(context);
                   DialogUtils.showAlertDialog(context,
                       child: AddTransactionPopup(
-                          group: widget.group,
-                          wallets: cubit.wallets ?? [],
-                          categories: cubit.categories ?? [],
-                          onAdd: (v) {
-                            cubit.addTransaction(v);
-                          }));
+                        group: widget.group,
+                        wallets: cubit.wallets ?? [],
+                        categories: cubit.categories ?? [],
+                        onAdd: (v) {
+                          cubit.addTransaction(v);
+                        },
+                        onUpdateWallet: (v) {
+                          cubit.updateWallet(v);
+                        },
+                      ));
                 },
               ),
               ListTile(
