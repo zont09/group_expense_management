@@ -17,7 +17,7 @@ class MainCubit extends Cubit<int> {
   UserModel user = UserModel(name: "None");
 
   initData() async {
-    user = UserModel(name: "Pham Ngoc Thinh", email: "ngocthinh2209@gmail.com");
+    user = UserModel(id: "oZbEeh0GJyk7I8otkySf", name: "Pham Ngoc Thinh", email: "ngocthinh2209@gmail.com");
     await loadAllUser();
     EMIT();
   }

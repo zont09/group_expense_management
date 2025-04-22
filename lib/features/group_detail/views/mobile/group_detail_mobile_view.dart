@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/configs/color_configs.dart';
 import 'package:group_expense_management/features/group_detail/bloc/group_detail_cubit.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/overview/overview_view.dart';
+import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_budget_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_transaction_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_wallet_popup.dart';
 import 'package:group_expense_management/models/group_model.dart';
@@ -130,7 +131,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
             children: <Widget>[
               ListTile(
                 leading: const Icon(Icons.money),
-                title: const Text('Add Transaction'),
+                title: const Text('Thêm giao dịch'),
                 onTap: () {
                   Navigator.pop(context);
                   DialogUtils.showAlertDialog(context,
@@ -141,6 +142,9 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                         onAdd: (v) {
                           cubit.addTransaction(v);
                         },
+                        onUpdateTrans: (v) {
+                          cubit.updateTransaction(v);
+                        },
                         onUpdateWallet: (v) {
                           cubit.updateWallet(v);
                         },
@@ -149,7 +153,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
               ),
               ListTile(
                 leading: const Icon(Icons.account_balance_wallet),
-                title: const Text('Add Wallet'),
+                title: const Text('Thêm ví'),
                 onTap: () {
                   Navigator.pop(context);
                   DialogUtils.showAlertDialog(context,
@@ -161,8 +165,22 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.monetization_on),
+                title: const Text('Thêm ngân sách'),
+                onTap: () {
+                  Navigator.pop(context);
+                  DialogUtils.showAlertDialog(context,
+                      child: AddBudgetPopup(
+                          group: widget.group,
+                          onAdd: (v) {
+                            cubit.addBudgetDetail(v);
+                          },
+                          categories: cubit.categories ?? []));
+                },
+              ),
+              ListTile(
                 leading: const Icon(Icons.savings),
-                title: const Text('Add Saving Goal'),
+                title: const Text('Thêm khoản tiết kiệm'),
                 onTap: () {
                   Navigator.pop(context);
                   _showAddSavingDialog(context);
@@ -170,7 +188,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
               ),
               ListTile(
                 leading: const Icon(Icons.person_add),
-                title: const Text('Add Member'),
+                title: const Text('Thêm thành viên'),
                 onTap: () {
                   Navigator.pop(context);
                   _showAddMemberDialog(context);

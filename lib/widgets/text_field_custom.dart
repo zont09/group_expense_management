@@ -7,15 +7,18 @@ class TextFieldCustom extends StatelessWidget {
       {super.key,
         required this.title,
         required this.controller,
-        this.isNumberOnly = false});
+        this.isNumberOnly = false,
+        this.canEdit = true});
 
   final String title;
   final bool isNumberOnly;
   final TextEditingController controller;
+  final bool canEdit;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: canEdit,
       keyboardType: isNumberOnly ? TextInputType.number : null,
       inputFormatters: [
         if (isNumberOnly) FilteringTextInputFormatter.digitsOnly,

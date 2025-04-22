@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:group_expense_management/models/budget_detail_model.dart';
+import 'package:group_expense_management/widgets/z_space.dart';
 
 class BudgetSummary extends StatelessWidget {
-  const BudgetSummary({super.key, required this.actionSeeAll});
+  const BudgetSummary({super.key, required this.actionSeeAll, required this.details});
 
   final Function() actionSeeAll;
+  final List<BudgetDetailModel> details;
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +17,14 @@ class BudgetSummary extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Budget Status',
+              'Tình trạng ngân sách',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             TextButton(
               onPressed: () {
                 actionSeeAll();
               },
-              child: const Text('See All'),
+              child: const Text('Xem thêm'),
             ),
           ],
         ),
@@ -31,37 +34,30 @@ class BudgetSummary extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ...details.map((e) => Column(
                   children: [
-                    const Text('Food'),
-                    Text('1,500,000 / 2,000,000 đ'),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Food'),
+                            Text('${e.current} / ${e.amount}'),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        LinearProgressIndicator(
+                          value: 0.75,
+                          backgroundColor: Colors.grey[300],
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.orange,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const ZSpace(h: 12),
                   ],
-                ),
-                const SizedBox(height: 8),
-                LinearProgressIndicator(
-                  value: 0.75,
-                  backgroundColor: Colors.grey[300],
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Colors.orange,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Transportation'),
-                    Text('500,000 / 1,000,000 đ'),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                LinearProgressIndicator(
-                  value: 0.5,
-                  backgroundColor: Colors.grey[300],
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Colors.green,
-                  ),
-                ),
+                )),
               ],
             ),
           ),
