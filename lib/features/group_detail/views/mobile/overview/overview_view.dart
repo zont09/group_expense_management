@@ -62,7 +62,9 @@ class OverviewView extends StatelessWidget {
           BudgetSummary(actionSeeAll: () {
             tabController.animateTo(2);
           },
-          details: cubit.budgetDetails ?? [],),
+          details: cubit.budgetDetails ?? [],
+          mapBudgetValue: cubit.mapMoneyBudget,
+          mapCate: cubit.mapCate,),
         ],
       ),
     );

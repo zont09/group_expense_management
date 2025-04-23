@@ -24,6 +24,8 @@ class GroupDetailCubit extends Cubit<int> {
   List<CategoryModel>? categories;
   List<BudgetDetailModel>? budgetDetails;
   List<BudgetModel>? budgets;
+  Map<String, double> mapMoneyBudget = {};
+  Map<String, CategoryModel> mapCate = {};
 
   initData() async {
     transactions?.clear();
@@ -34,6 +36,9 @@ class GroupDetailCubit extends Cubit<int> {
     transactions = await _transactionService.getAllTransactionByGroup(group.id);
     wallets = await _walletService.getAllWalletByGroup(group.id);
     categories = await _categoryService.getAllCategory();
+    for(var e in categories ?? []) {
+      mapCate[e.id] = e;
+    }
     budgets = await _budgetService.getBudgetByGroup(group.id);
     budgetDetails = [];
     for(var e in budgets!) {
@@ -45,13 +50,15 @@ class GroupDetailCubit extends Cubit<int> {
       }
     }
     transactions!.sort((a, b) => b.date.compareTo(a.date));
+    calculateBudget();
     EMIT();
   }
 
   addTransaction(TransactionModel model) async {
-    await _transactionService.addTransaction(model);
+    // await _transactionService.addTransaction(model);
     transactions ??= [];
     transactions?.add(model);
+    calculateBudget();
     EMIT();
   }
 
@@ -66,6 +73,7 @@ class GroupDetailCubit extends Cubit<int> {
     } else {
       transactions?.add(model);
     }
+    calculateBudget();
     EMIT();
   }
 
@@ -126,6 +134,20 @@ class GroupDetailCubit extends Cubit<int> {
       }
     } else {
       budgetDetails?.add(model);
+    }
+    EMIT();
+  }
+
+  calculateBudget() {
+    mapMoneyBudget.clear();
+    for(var e in transactions ?? <TransactionModel>[]) {
+      final keySpent = "${e.category.split("_")[0]}_${e.date.month}/${e.date.year}";
+      if(mapMoneyBudget.containsKey(keySpent)) {
+        mapMoneyBudget[keySpent] = mapMoneyBudget[keySpent]! + e.amount;
+      } else {
+        mapMoneyBudget[keySpent] = e.amount;
+      }
+      print("=====> calc: $keySpent - ${mapMoneyBudget[keySpent]}");
     }
     EMIT();
   }

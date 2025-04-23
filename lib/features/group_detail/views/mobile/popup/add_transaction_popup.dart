@@ -152,7 +152,7 @@ class AddTransactionPopup extends StatelessWidget {
                                   context, "Vui lòng chọn ví để tiếp tục");
                               return;
                             }
-                            await DialogUtils.showLoadingDialog(context);
+                            DialogUtils.showLoadingDialog(context);
                             final wallet = await WalletService.instance
                                 .getWalletById(cubit.wallet!.id);
                             if (wallet == null) {
@@ -187,8 +187,9 @@ class AddTransactionPopup extends StatelessWidget {
                                 .updateWallet(updWallet);
                             final trans = await cubit.addTransaction();
                             onAdd(trans);
-                            onUpdateWallet(wallet);
+                            onUpdateWallet(updWallet);
                             if (context.mounted) {
+                              debugPrint("=====> add transaction here");
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();
                             }
