@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/configs/color_configs.dart';
 import 'package:group_expense_management/features/group_detail/bloc/group_detail_cubit.dart';
+import 'package:group_expense_management/features/group_detail/views/mobile/budget/budget_view.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/overview/overview_view.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_budget_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_transaction_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_wallet_popup.dart';
+import 'package:group_expense_management/features/group_detail/views/mobile/transaction/transaction_view.dart';
 import 'package:group_expense_management/models/group_model.dart';
 import 'package:group_expense_management/utils/dialog_utils.dart';
 import 'package:group_expense_management/utils/resizable_utils.dart';
@@ -102,8 +104,8 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                         tabController: _tabController,
                         cubit: cubit,
                       ),
-                      _buildTransactionsTab(),
-                      _buildBudgetTab(),
+                      TransactionView(cubitDt: cubit),
+                      BudgetView(cubitDt: cubit),
                       _buildSavingsTab(),
                       _buildMembersTab(),
                     ],

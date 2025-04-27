@@ -47,15 +47,18 @@ class AddBudgetCubit extends Cubit<int> {
       group: group.id,
       enable: true,
     );
+    debugPrint("====> ${dataBd.toString()} - ${group.id} - ${date}");
     final isExist = await _budgetService.getBudgetDetailByBudgetCateDate(model.id ,category!.id, date);
-    if(isExist == null) {
+    if(isExist != null) {
       ToastUtils.showBottomToast(context, "Ngân sách này đã được tạo rồi, vui lòng thử lại");
       return null;
     }
+    DateTime now = DateTime.now();
     final modelDetail = BudgetDetailModel(
       id: FirebaseFirestore.instance.collection('budget_details').doc().id,
       category: category!.id,
       group: group.id,
+      date: DateTime(now.year, now.month),
       amount: double.tryParse(conAmount.text) ?? 0,
       enable: true,
     );
@@ -66,7 +69,7 @@ class AddBudgetCubit extends Cubit<int> {
       await _budgetService.updateBudget(model);
     }
     await _budgetService.addBudgetDetail(modelDetail);
-    return model;
+    return modelDetail;
   }
 
   EMIT() {
