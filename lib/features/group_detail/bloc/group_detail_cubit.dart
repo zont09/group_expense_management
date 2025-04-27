@@ -3,10 +3,12 @@ import 'package:group_expense_management/models/budget_detail_model.dart';
 import 'package:group_expense_management/models/budget_model.dart';
 import 'package:group_expense_management/models/category_model.dart';
 import 'package:group_expense_management/models/group_model.dart';
+import 'package:group_expense_management/models/saving_model.dart';
 import 'package:group_expense_management/models/transaction_model.dart';
 import 'package:group_expense_management/models/wallet_model.dart';
 import 'package:group_expense_management/services/budget_service.dart';
 import 'package:group_expense_management/services/category_service.dart';
+import 'package:group_expense_management/services/saving_service.dart';
 import 'package:group_expense_management/services/transaction_service.dart';
 import 'package:group_expense_management/services/wallet_service.dart';
 
@@ -17,12 +19,14 @@ class GroupDetailCubit extends Cubit<int> {
   final WalletService _walletService = WalletService.instance;
   final CategoryService _categoryService = CategoryService.instance;
   final BudgetService _budgetService = BudgetService.instance;
+  final SavingService _savingService = SavingService.instance;
   late GroupModel group;
 
   List<TransactionModel>? transactions;
   List<WalletModel>? wallets;
   List<CategoryModel>? categories;
   List<BudgetDetailModel>? budgetDetails;
+  List<SavingModel>? savings;
   List<BudgetModel>? budgets;
   Map<String, double> mapMoneyBudget = {};
   Map<String, CategoryModel> mapCate = {};
@@ -33,6 +37,7 @@ class GroupDetailCubit extends Cubit<int> {
     categories?.clear();
     budgets?.clear();
     budgetDetails?.clear();
+    savings?.clear();
     transactions = await _transactionService.getAllTransactionByGroup(group.id);
     wallets = await _walletService.getAllWalletByGroup(group.id);
     categories = await _categoryService.getAllCategory();
@@ -49,6 +54,7 @@ class GroupDetailCubit extends Cubit<int> {
         }
       }
     }
+    savings = await _savingService.getAllSavingsByGroup(group.id);
     transactions!.sort((a, b) => b.date.compareTo(a.date));
     calculateBudget();
     EMIT();
@@ -134,6 +140,26 @@ class GroupDetailCubit extends Cubit<int> {
       }
     } else {
       budgetDetails?.add(model);
+    }
+    EMIT();
+  }
+
+  addSaving(SavingModel model) async {
+    savings ??= [];
+    savings?.add(model);
+    EMIT();
+  }
+
+  updateSaving(SavingModel model) async {
+    int index = savings?.indexWhere((e) => e.id == model.id) ?? -1;
+    if(index != -1) {
+      if(model.enable) {
+        savings?[index] = model;
+      } else {
+        savings?.removeAt(index);
+      }
+    } else {
+      savings?.add(model);
     }
     EMIT();
   }

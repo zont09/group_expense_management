@@ -3,48 +3,48 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/app_texts.dart';
 import 'package:group_expense_management/configs/color_configs.dart';
+import 'package:group_expense_management/features/group_detail/bloc/add_saving_cubit.dart';
 import 'package:group_expense_management/features/group_detail/bloc/add_transaction_cubit.dart';
 import 'package:group_expense_management/main_cubit.dart';
 import 'package:group_expense_management/models/category_model.dart';
 import 'package:group_expense_management/models/group_model.dart';
+import 'package:group_expense_management/models/saving_model.dart';
 import 'package:group_expense_management/models/transaction_model.dart';
 import 'package:group_expense_management/models/wallet_model.dart';
 import 'package:group_expense_management/services/wallet_service.dart';
 import 'package:group_expense_management/utils/dialog_utils.dart';
 import 'package:group_expense_management/utils/toast_utils.dart';
+import 'package:group_expense_management/widgets/datetime_picker.dart';
 import 'package:group_expense_management/widgets/text_field_custom.dart';
 import 'package:group_expense_management/widgets/z_button.dart';
 
-class AddTransactionPopup extends StatelessWidget {
-  const AddTransactionPopup(
+class AddSavingPopup extends StatelessWidget {
+  const AddSavingPopup(
       {super.key,
       required this.group,
       required this.wallets,
-      required this.categories,
       required this.onAdd,
-      required this.onUpdateTrans,
+      required this.onUpdate,
       required this.onUpdateWallet,
       this.isEdit = false,
       this.model});
 
   final GroupModel group;
   final List<WalletModel> wallets;
-  final List<CategoryModel> categories;
-  final Function(TransactionModel) onAdd;
-  final Function(TransactionModel) onUpdateTrans;
+  final Function(SavingModel) onAdd;
+  final Function(SavingModel) onUpdate;
   final Function(WalletModel) onUpdateWallet;
   final bool isEdit;
-  final TransactionModel? model;
+  final SavingModel? model;
 
   @override
   Widget build(BuildContext context) {
     final mC = MainCubit.fromContext(context);
     return BlocProvider(
-      create: (context) => AddTransactionCubit(group, mC.user)
-        ..initData(isEdit, wallets, categories, model: model),
-      child: BlocBuilder<AddTransactionCubit, int>(
+      create: (context) => AddSavingCubit(group, mC.user)..initData(wallets),
+      child: BlocBuilder<AddSavingCubit, int>(
         builder: (c, s) {
-          var cubit = BlocProvider.of<AddTransactionCubit>(c);
+          var cubit = BlocProvider.of<AddSavingCubit>(c);
           return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
@@ -56,14 +56,16 @@ class AddTransactionPopup extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  !isEdit ? "Thêm mới giao dịch" : "Chỉnh sửa giao dịch",
+                  !isEdit
+                      ? "Thêm mới khoảng tiết kiệm"
+                      : "Chỉnh sửa khoảng tiết kiệm",
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: ColorConfig.textColor6),
                 ),
                 TextFieldCustom(
-                  title: "Tiêu đề",
+                  title: "Tên",
                   controller: cubit.conTitle,
                   canEdit: cubit.canEdit,
                 ),
@@ -73,32 +75,28 @@ class AddTransactionPopup extends StatelessWidget {
                     canEdit: cubit.canEdit),
                 TextFieldCustom(
                     title: "Số tiền",
-                    controller: cubit.conAmount,
+                    controller: cubit.conTargetAmount,
                     isNumberOnly: true,
                     canEdit: cubit.canEdit),
-                AbsorbPointer(
-                  absorbing:
-                      !cubit.canEdit || cubit.category?.title == "Không rõ",
-                  child: DropdownCategory(
-                    title: "Loại giao dịch",
-                    initItem: cubit.category,
-                    items: categories,
-                    onChanged: (v) {
-                      cubit.category = v;
-                    },
-                  ),
-                ),
-                AbsorbPointer(
-                  absorbing: cubit.isEdit,
-                  child: DropdownWallet(
-                    title: "Ví",
-                    initItem: cubit.wallet,
-                    items: wallets,
-                    onChanged: (v) {
-                      cubit.wallet = v;
-                    },
-                  ),
-                ),
+                DayPickerCustom(
+                    title: "Hạn đến",
+                    controller: TextEditingController(
+                        text:
+                            "${cubit.targetDate.day}/${cubit.targetDate.month}/${cubit.targetDate.year}"),
+                    onDateSelected: (v) {
+                      cubit.onSelectDate(v);
+                    }),
+                // AbsorbPointer(
+                //   absorbing: cubit.isEdit,
+                //   child: DropdownWallet(
+                //     title: "Ví",
+                //     initItem: cubit.wallet,
+                //     items: cubit.listWallets,
+                //     onChanged: (v) {
+                //       cubit.wallet = v;
+                //     },
+                //   ),
+                // ),
                 const SizedBox(height: 18),
                 if (cubit.isEdit && !cubit.canEdit)
                   Row(
@@ -114,7 +112,7 @@ class AddTransactionPopup extends StatelessWidget {
                             Navigator.of(context).pop();
                           }),
                       const SizedBox(width: 10),
-                      if (cubit.model?.user == mC.user.id ||
+                      if (
                           group.owner == mC.user.id)
                         ZButton(
                             title: "Chỉnh sửa",
@@ -147,47 +145,58 @@ class AddTransactionPopup extends StatelessWidget {
                           colorBackground: ColorConfig.primary2,
                           colorTitle: Colors.white,
                           onPressed: () async {
-                            if (cubit.wallet == null) {
-                              ToastUtils.showBottomToast(
-                                  context, "Vui lòng chọn ví để tiếp tục");
-                              return;
-                            }
+                            // if (cubit.wallet == null) {
+                            //   ToastUtils.showBottomToast(
+                            //       context, "Vui lòng chọn ví để tiếp tục");
+                            //   return;
+                            // }
                             DialogUtils.showLoadingDialog(context);
-                            final wallet = await WalletService.instance
-                                .getWalletById(cubit.wallet!.id);
-                            if (wallet == null) {
-                              ToastUtils.showBottomToast(
-                                  context, "Ví không còn tồn tại");
-                              if (context.mounted) {
-                                Navigator.of(context).pop();
-                              }
+                            // final wallet = cubit.wallet!.id == "Ca nhan" ||
+                            //         cubit.wallet!.id == "Khac"
+                            //     ? cubit.wallet
+                            //     : await WalletService.instance
+                            //         .getWalletById(cubit.wallet!.id);
+                            // if (wallet == null) {
+                            //   ToastUtils.showBottomToast(
+                            //       context, "Ví không còn tồn tại");
+                            //   if (context.mounted) {
+                            //     Navigator.of(context).pop();
+                            //   }
+                            //   return;
+                            // }
+                            if(cubit.conTitle.text.isEmpty) {
+                              ToastUtils.showBottomToast(context, "Vui lòng nhập tên khoảng tiết kiệm");
                               return;
                             }
-                            if (cubit.isEdit) {
-                              await cubit.updateTransaction(context, wallet,
-                                  onUpdateTrans, onUpdateWallet);
-                              if (context.mounted) {
-                                Navigator.of(context).pop();
-                                Navigator.of(context).pop();
-                              }
+                            if(cubit.conDes.text.isEmpty) {
+                              ToastUtils.showBottomToast(context, "Vui lòng nhập mô tả khoảng tiết kiệm");
                               return;
                             }
-                            if (wallet.amount <
-                                double.parse(cubit.conAmount.text)) {
-                              ToastUtils.showBottomToast(context,
-                                  "Ví không còn đủ số dư để thực hiện giao dịch");
+                            if(cubit.conTargetAmount.text.isEmpty) {
+                              ToastUtils.showBottomToast(context, "Vui lòng nhập số tiền cần tiết kiệm");
                               return;
                             }
-                            debugPrint(
-                                "=====> wallet: ${wallet.id} - ${wallet.group}");
-                            final updWallet = wallet.copyWith(
-                                amount: wallet.amount -
-                                    double.parse(cubit.conAmount.text));
-                            await WalletService.instance
-                                .updateWallet(updWallet);
-                            final trans = await cubit.addTransaction();
+                            if(double.parse(cubit.conTargetAmount.text) <= 0) {
+                              ToastUtils.showBottomToast(context, "Vui lòng nhập số tiền lớn hơn 0");
+                              return;
+                            }
+                            // if (wallet.amount <
+                            //         double.parse(cubit.conTargetAmount.text) &&
+                            //     wallet.amount != -1) {
+                            //   ToastUtils.showBottomToast(context,
+                            //       "Ví không còn đủ số dư để thực hiện giao dịch");
+                            //   return;
+                            // }
+                            // debugPrint(
+                            //     "=====> wallet: ${wallet.id} - ${wallet.group}");
+                            // final updWallet = wallet.copyWith(
+                            //     amount: wallet.amount -
+                            //         double.parse(cubit.conTargetAmount.text));
+                            // await WalletService.instance
+                            //     .updateWallet(updWallet);
+                            final trans = await cubit.onAddSaving();
                             onAdd(trans);
-                            onUpdateWallet(updWallet);
+                            // onUpdateWallet(updWallet);
                             if (context.mounted) {
                               debugPrint("=====> add transaction here");
                               Navigator.of(context).pop();

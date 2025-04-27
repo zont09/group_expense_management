@@ -6,6 +6,7 @@ import 'package:group_expense_management/features/group_detail/bloc/group_detail
 import 'package:group_expense_management/features/group_detail/views/mobile/budget/budget_view.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/overview/overview_view.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_budget_popup.dart';
+import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_saving_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_transaction_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_wallet_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/transaction/transaction_view.dart';
@@ -185,7 +186,19 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                 title: const Text('Thêm khoản tiết kiệm'),
                 onTap: () {
                   Navigator.pop(context);
-                  _showAddSavingDialog(context);
+                  DialogUtils.showAlertDialog(context,
+                      child: AddSavingPopup(
+                          group: widget.group,
+                          wallets: cubit.wallets ?? [],
+                          onAdd: (v){
+                            cubit.addSaving(v);
+                          },
+                          onUpdate: (v) {
+                            cubit.updateSaving(v);
+                          },
+                          onUpdateWallet: (v) {
+                            cubit.updateWallet(v);
+                          }));
                 },
               ),
               ListTile(

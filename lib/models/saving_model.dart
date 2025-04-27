@@ -10,6 +10,7 @@ class SavingModel {
   final String currency;
   final List<String> details;
   final String group;
+  final String owner;
   final bool enable;
 
   // Constructor với giá trị mặc định
@@ -23,6 +24,7 @@ class SavingModel {
     this.currency = 'VND',
     this.details = const [],
     this.group = '',
+    this.owner = '',
     this.enable = true,
   }) : this.targetDate = targetDate ?? DateTime.now().add(const Duration(days: 30));
 
@@ -37,6 +39,7 @@ class SavingModel {
     String? currency,
     List<String>? details,
     String? group,
+    String? owner,
     bool? enable,
   }) {
     return SavingModel(
@@ -49,6 +52,7 @@ class SavingModel {
       currency: currency ?? this.currency,
       details: details ?? List.from(this.details),
       group: group ?? this.group,
+      owner: owner ?? this.owner,
       enable: enable ?? this.enable,
     );
   }
@@ -65,6 +69,7 @@ class SavingModel {
       'currency': currency,
       'details': details,
       'group': group,
+      'owner': owner,
       'enable': enable,
     };
   }
@@ -81,6 +86,7 @@ class SavingModel {
       currency: json['currency'] ?? 'VND',
       details: List<String>.from(json['details'] ?? []),
       group: json['group'] ?? '',
+      owner: json['owner'] ?? '',
       enable: json['enable'] ?? true,
     );
   }
@@ -107,6 +113,7 @@ class SavingModel {
       currency: data['currency'] ?? 'VND',
       details: List<String>.from(data['details'] ?? []),
       group: data['group'] ?? '',
+      owner: data['owner'] ?? '',
       enable: data['enable'] ?? true,
     );
   }
