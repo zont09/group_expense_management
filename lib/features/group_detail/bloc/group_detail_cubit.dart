@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/models/budget_detail_model.dart';
 import 'package:group_expense_management/models/budget_model.dart';
@@ -54,6 +55,8 @@ class GroupDetailCubit extends Cubit<int> {
         }
       }
     }
+    debugPrint("=====> budget: ${budgets?.length}");
+    debugPrint("=====> budget details: ${budgetDetails?.length}");
     savings = await _savingService.getAllSavingsByGroup(group.id);
     transactions!.sort((a, b) => b.date.compareTo(a.date));
     calculateBudget();

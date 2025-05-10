@@ -9,6 +9,7 @@ import 'package:group_expense_management/features/group_detail/views/mobile/popu
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_saving_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_transaction_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_wallet_popup.dart';
+import 'package:group_expense_management/features/group_detail/views/mobile/saving/saving_view.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/transaction/transaction_view.dart';
 import 'package:group_expense_management/models/group_model.dart';
 import 'package:group_expense_management/utils/dialog_utils.dart';
@@ -107,7 +108,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                       ),
                       TransactionView(cubitDt: cubit),
                       BudgetView(cubitDt: cubit),
-                      _buildSavingsTab(),
+                      SavingView(savings: cubit.savings ?? [], cubitOv: cubit,),
                       _buildMembersTab(),
                     ],
                   ),

@@ -58,7 +58,7 @@ class AddBudgetCubit extends Cubit<int> {
       id: FirebaseFirestore.instance.collection('budget_details').doc().id,
       category: category!.id,
       group: group.id,
-      date: DateTime(now.year, now.month),
+      date: date,
       amount: double.tryParse(conAmount.text) ?? 0,
       enable: true,
     );

@@ -11,7 +11,7 @@ class BudgetView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = "${DateTime.now().month}/${DateTime.now().year}";
+    final now = "${DateTime.now().month - 1}/${DateTime.now().year}";
     double sumSpent = 0;
     cubitDt.mapMoneyBudget.forEach((k, v) {
       final cat = k.split('_')[0];
@@ -27,6 +27,9 @@ class BudgetView extends StatelessWidget {
         sumBudget += e.amount;
       }
     });
+
+    debugPrint("=====> budget 2: ${cubitDt.budgets?.length}");
+    debugPrint("=====> budget details 2: ${cubitDt.budgetDetails?.length}");
 
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -103,7 +106,7 @@ class BudgetView extends StatelessWidget {
                               color: ColorConfig.textColor),
                         ),
                         Text(
-                          "${NumberFormat.currency(locale: 'vi_VN', symbol: 'đ').format(sumBudget - sumBudget)}",
+                          "${NumberFormat.currency(locale: 'vi_VN', symbol: 'đ').format(sumBudget - sumSpent)}",
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:group_expense_management/models/dummy_data.dart';
 import 'package:group_expense_management/models/group_model.dart';
 import 'package:group_expense_management/models/saving_model.dart';
 import 'package:group_expense_management/models/user_model.dart';
@@ -30,8 +31,8 @@ class AddSavingCubit extends Cubit<int> {
     listWallets.clear();
     listWallets.addAll([
       ...wallets,
-      WalletModel(id: "Ca nhan", name: "Cá nhân", amount: -1),
-      WalletModel(id: "Khac", name: "Khác", amount: -1)
+      DummyData.walletPersonal,
+      DummyData.walletOther
     ]);
   }
 
