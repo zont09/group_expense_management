@@ -31,6 +31,7 @@ class GroupDetailCubit extends Cubit<int> {
   List<BudgetModel>? budgets;
   Map<String, double> mapMoneyBudget = {};
   Map<String, CategoryModel> mapCate = {};
+  Map<String, TransactionModel> mapTrans = {};
 
   initData() async {
     transactions?.clear();
@@ -40,6 +41,9 @@ class GroupDetailCubit extends Cubit<int> {
     budgetDetails?.clear();
     savings?.clear();
     transactions = await _transactionService.getAllTransactionByGroup(group.id);
+    for(var e in transactions ?? []) {
+      mapTrans[e.id] = e;
+    }
     wallets = await _walletService.getAllWalletByGroup(group.id);
     categories = await _categoryService.getAllCategory();
     for(var e in categories ?? []) {
@@ -67,6 +71,7 @@ class GroupDetailCubit extends Cubit<int> {
     // await _transactionService.addTransaction(model);
     transactions ??= [];
     transactions?.add(model);
+    mapTrans[model.id] = model;
     calculateBudget();
     EMIT();
   }
@@ -76,11 +81,14 @@ class GroupDetailCubit extends Cubit<int> {
     if(index != -1) {
       if(model.enable) {
         transactions?[index] = model;
+        mapTrans[model.id] = model;
       } else {
         transactions?.removeAt(index);
+        mapTrans.remove(model.id);
       }
     } else {
       transactions?.add(model);
+      mapTrans[model.id] = model;
     }
     calculateBudget();
     EMIT();
@@ -164,6 +172,7 @@ class GroupDetailCubit extends Cubit<int> {
     } else {
       savings?.add(model);
     }
+    debugPrint("====> Update saving: ${model.id} - ${model.details.length}");
     EMIT();
   }
 

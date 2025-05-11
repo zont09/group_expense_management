@@ -12,6 +12,7 @@ import 'package:group_expense_management/models/group_model.dart';
 import 'package:group_expense_management/models/saving_model.dart';
 import 'package:group_expense_management/models/transaction_model.dart';
 import 'package:group_expense_management/models/wallet_model.dart';
+import 'package:group_expense_management/services/saving_service.dart';
 import 'package:group_expense_management/services/wallet_service.dart';
 import 'package:group_expense_management/utils/dialog_utils.dart';
 import 'package:group_expense_management/utils/toast_utils.dart';
@@ -27,6 +28,7 @@ class AddSavingDetailPopup extends StatelessWidget {
       required this.onAdd,
       required this.onUpdateTrans,
       required this.onUpdateWallet,
+      required this.onUpdateSaving,
       this.isEdit = false,
       this.model});
 
@@ -36,6 +38,7 @@ class AddSavingDetailPopup extends StatelessWidget {
   final Function(TransactionModel) onAdd;
   final Function(TransactionModel) onUpdateTrans;
   final Function(WalletModel) onUpdateWallet;
+  final Function(SavingModel) onUpdateSaving;
   final bool isEdit;
   final TransactionModel? model;
 
@@ -142,9 +145,15 @@ class AddSavingDetailPopup extends StatelessWidget {
                               return;
                             }
                             DialogUtils.showLoadingDialog(context);
-                            final wallet = (cubit.wallet!.id != DummyData.walletPersonal.id && cubit.wallet!.id != DummyData.walletOther.id) ? await WalletService.instance
-                                .getWalletById(cubit.wallet!.id) : cubit.wallet!;
-                            debugPrint("====> Check wallet: ${wallet?.id} - ${cubit.wallet!.id}");
+                            final wallet = (cubit.wallet!.id !=
+                                        DummyData.walletPersonal.id &&
+                                    cubit.wallet!.id !=
+                                        DummyData.walletOther.id)
+                                ? await WalletService.instance
+                                    .getWalletById(cubit.wallet!.id)
+                                : cubit.wallet!;
+                            debugPrint(
+                                "====> Check wallet: ${wallet?.id} - ${cubit.wallet!.id}");
                             if (wallet == null) {
                               ToastUtils.showBottomToast(
                                   context, "Ví không còn tồn tại");
@@ -162,8 +171,9 @@ class AddSavingDetailPopup extends StatelessWidget {
                             //   }
                             //   return;
                             // }
-                            if (wallet.amount != -9 &&  wallet.amount <
-                                double.parse(cubit.conAmount.text)) {
+                            if (wallet.amount != -9 &&
+                                wallet.amount <
+                                    double.parse(cubit.conAmount.text)) {
                               ToastUtils.showBottomToast(context,
                                   "Ví không còn đủ số dư để thực hiện giao dịch");
                               if (context.mounted) {
@@ -179,6 +189,11 @@ class AddSavingDetailPopup extends StatelessWidget {
                             await WalletService.instance
                                 .updateWallet(updWallet);
                             final trans = await cubit.addTransaction();
+                            SavingService.instance.updateSavings(saving
+                                .copyWith(
+                                    details: [...saving.details, trans.id]));
+                            onUpdateSaving(saving.copyWith(
+                                details: [...saving.details, trans.id]));
                             onAdd(trans);
                             onUpdateWallet(updWallet);
                             if (context.mounted) {

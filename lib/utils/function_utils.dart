@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class FunctionUtils {
   static String getIdDb(String collection) {
@@ -28,6 +29,12 @@ class FunctionUtils {
     output = output.replaceAll(RegExp(r'\s+'), ' ');
 
     return output;
+  }
+
+  static String formatVND(double amount) {
+    return NumberFormat.currency(
+        locale: 'vi_VN', symbol: 'đ')
+        .format(amount);
   }
 
 }

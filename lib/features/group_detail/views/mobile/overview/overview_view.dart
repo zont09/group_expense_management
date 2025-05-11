@@ -9,10 +9,11 @@ import 'package:group_expense_management/models/group_model.dart';
 import 'package:group_expense_management/utils/dialog_utils.dart';
 
 class OverviewView extends StatelessWidget {
-  const OverviewView({super.key,
-    required this.group,
-    required this.tabController,
-    required this.cubit});
+  const OverviewView(
+      {super.key,
+      required this.group,
+      required this.tabController,
+      required this.cubit});
 
   final GroupModel group;
   final TabController tabController;
@@ -35,12 +36,17 @@ class OverviewView extends StatelessWidget {
               }),
           const SizedBox(height: 24),
           RecentTransaction(
-            transactions: cubit.transactions ?? [],
+            transactions: cubit.transactions
+                    ?.where((e) => !e.category.contains("-9"))
+                    .toList() ??
+                [],
             actionSeeAll: () {
               tabController.animateTo(1);
             },
             seeDetail: (v) {
-              DialogUtils.showAlertDialog(context, child: AddTransactionPopup(
+              DialogUtils.showAlertDialog(
+                context,
+                child: AddTransactionPopup(
                   group: group,
                   wallets: cubit.wallets ?? [],
                   categories: cubit.categories ?? [],
@@ -53,18 +59,21 @@ class OverviewView extends StatelessWidget {
                   onUpdateWallet: (v) {
                     cubit.updateWallet(v);
                   },
-                isEdit: true,
-                model: v,
-              ),);
+                  isEdit: true,
+                  model: v,
+                ),
+              );
             },
           ),
           const SizedBox(height: 24),
-          BudgetSummary(actionSeeAll: () {
-            tabController.animateTo(2);
-          },
-          details: cubit.budgetDetails ?? [],
-          mapBudgetValue: cubit.mapMoneyBudget,
-          mapCate: cubit.mapCate,),
+          BudgetSummary(
+            actionSeeAll: () {
+              tabController.animateTo(2);
+            },
+            details: cubit.budgetDetails ?? [],
+            mapBudgetValue: cubit.mapMoneyBudget,
+            mapCate: cubit.mapCate,
+          ),
         ],
       ),
     );

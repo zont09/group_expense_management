@@ -102,13 +102,15 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                     controller: _tabController,
                     children: [
                       OverviewView(
-                        group: widget.group,
-                        tabController: _tabController,
-                        cubit: cubit,
-                      ),
+                          group: widget.group,
+                          tabController: _tabController,
+                          cubit: cubit),
                       TransactionView(cubitDt: cubit),
                       BudgetView(cubitDt: cubit),
-                      SavingView(savings: cubit.savings ?? [], cubitOv: cubit,),
+                      SavingView(
+                        savings: cubit.savings ?? [],
+                        cubitOv: cubit,
+                      ),
                       _buildMembersTab(),
                     ],
                   ),
@@ -191,7 +193,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                       child: AddSavingPopup(
                           group: widget.group,
                           wallets: cubit.wallets ?? [],
-                          onAdd: (v){
+                          onAdd: (v) {
                             cubit.addSaving(v);
                           },
                           onUpdate: (v) {
