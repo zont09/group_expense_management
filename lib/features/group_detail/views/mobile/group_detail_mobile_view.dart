@@ -13,6 +13,7 @@ import 'package:group_expense_management/features/group_detail/views/mobile/popu
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_wallet_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/saving/saving_view.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/transaction/transaction_view.dart';
+import 'package:group_expense_management/main_cubit.dart';
 import 'package:group_expense_management/models/group_model.dart';
 import 'package:group_expense_management/utils/dialog_utils.dart';
 import 'package:group_expense_management/utils/resizable_utils.dart';
@@ -54,7 +55,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-      GroupDetailCubit(widget.group)
+      GroupDetailCubit(widget.group, MainCubit.fromContext(context),)
         ..initData(),
       child: BlocBuilder<GroupDetailCubit, int>(
         builder: (c, s) {
@@ -115,7 +116,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                   savings: cubit.savings ?? [],
                   cubitOv: cubit,
                 ),
-                MemberMainView(cubitGD: cubit),
+                MemberMainView(),
               ],
             ),
             floatingActionButton: _buildFloatingActionButton(cubit),

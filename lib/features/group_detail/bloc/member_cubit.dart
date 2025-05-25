@@ -4,21 +4,23 @@ import 'package:group_expense_management/models/group_model.dart';
 import 'package:group_expense_management/models/user_model.dart';
 
 class MemberCubit extends Cubit<int> {
-  MemberCubit(this.group, this.user, this.mC) : super(0);
+  MemberCubit(this.user, this.mC) : super(0);
 
   late final UserModel user;
-  late final GroupModel group;
+  late GroupModel group;
   late final MainCubit mC;
 
   List<UserModel> listMember = [];
 
-  initData() {
+  initData(GroupModel gr) {
+    print("===> initData MemberCubit");
+    group = gr;
+    listMember.clear();
     UserModel? owner = mC.mapUser[group.owner];
     if(owner != null) {
       owner = owner.copyWith();
       owner.roleInGroup = 0;
       listMember.add(owner);
-      print("===> owner: ${owner.name} - ${owner.roleInGroup}");
     }
 
     for (var e in group.managers) {
@@ -26,7 +28,6 @@ class MemberCubit extends Cubit<int> {
       if(mem == null) continue;
       mem = mem.copyWith();
       mem.roleInGroup = 1;
-      print("===> Manager: ${mem.name} - ${mem.roleInGroup}");
       listMember.add(mem);
     }
 
@@ -35,12 +36,7 @@ class MemberCubit extends Cubit<int> {
       if(mem == null) continue;
       mem = mem.copyWith();
       mem.roleInGroup = 2;
-      print("===> Member: ${mem.name} - ${mem.roleInGroup}");
       listMember.add(mem);
-    }
-
-    for(var e in listMember) {
-      print("===> member: ${e.name} - ${e.roleInGroup}");
     }
   }
 

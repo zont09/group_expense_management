@@ -47,7 +47,6 @@ class AddBudgetCubit extends Cubit<int> {
       group: group.id,
       enable: true,
     );
-    debugPrint("====> ${dataBd.toString()} - ${group.id} - ${date}");
     final isExist = await _budgetService.getBudgetDetailByBudgetCateDate(model.id ,category!.id, date);
     if(isExist != null) {
       ToastUtils.showBottomToast(context, "Ngân sách này đã được tạo rồi, vui lòng thử lại");

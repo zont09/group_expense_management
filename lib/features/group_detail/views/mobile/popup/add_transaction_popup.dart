@@ -178,8 +178,6 @@ class AddTransactionPopup extends StatelessWidget {
                                   "Ví không còn đủ số dư để thực hiện giao dịch");
                               return;
                             }
-                            debugPrint(
-                                "=====> wallet: ${wallet.id} - ${wallet.group}");
                             final updWallet = wallet.copyWith(
                                 amount: wallet.amount -
                                     double.parse(cubit.conAmount.text));
@@ -189,7 +187,6 @@ class AddTransactionPopup extends StatelessWidget {
                             onAdd(trans);
                             onUpdateWallet(updWallet);
                             if (context.mounted) {
-                              debugPrint("=====> add transaction here");
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();
                             }

@@ -28,7 +28,6 @@ class SavingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final current = calculateProgress(e);
     final percent = e.targetAmount == 0 ? 0 : current * 100 ~/ e.targetAmount;
-    debugPrint("=====> rebuild saving card: ${e.details.length}");
     return Column(
       children: [
         Container(

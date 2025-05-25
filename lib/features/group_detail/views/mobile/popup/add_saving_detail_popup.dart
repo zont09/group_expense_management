@@ -152,8 +152,6 @@ class AddSavingDetailPopup extends StatelessWidget {
                                 ? await WalletService.instance
                                     .getWalletById(cubit.wallet!.id)
                                 : cubit.wallet!;
-                            debugPrint(
-                                "====> Check wallet: ${wallet?.id} - ${cubit.wallet!.id}");
                             if (wallet == null) {
                               ToastUtils.showBottomToast(
                                   context, "Ví không còn tồn tại");
@@ -181,8 +179,6 @@ class AddSavingDetailPopup extends StatelessWidget {
                               }
                               return;
                             }
-                            debugPrint(
-                                "=====> wallet: ${wallet.id} - ${wallet.group}");
                             final updWallet = wallet.copyWith(
                                 amount: wallet.amount -
                                     double.parse(cubit.conAmount.text));

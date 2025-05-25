@@ -89,7 +89,6 @@ class LoginTextFieldView extends StatelessWidget {
             onTap: () async {
               final status = await DialogUtils.showAlertDialog(context,
                   child: ForgotPasswordPopup());
-              debugPrint("=====> status reset: $status");
               if (status == 0) {
                 DialogUtils.showResultDialog(
                     context, AppText.titleResetPasswordSuccess.text,

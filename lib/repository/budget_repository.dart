@@ -29,7 +29,6 @@ class BudgetRepository {
           .map((e) => BudgetModel.fromSnapshot(e))
           .toList();
     } catch (e) {
-      debugPrint("====> Error get all wallets by id group: $e");
       return [];
     }
   }
@@ -45,7 +44,6 @@ class BudgetRepository {
           .map((e) => BudgetModel.fromSnapshot(e))
           .firstOrNull;
     } catch (e) {
-      debugPrint("====> Error get wallet by id: $e");
       return null;
     }
   }
@@ -53,7 +51,6 @@ class BudgetRepository {
   Future<BudgetModel?> getBudgetByGroupAndDate(String gid, DateTime date) async {
     try {
 
-      debugPrint("====> ${gid} - ${date}");
       final snapshot = await fireStore
           .collection("budgets")
           .where('enable', isEqualTo: true)

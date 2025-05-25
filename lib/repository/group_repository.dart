@@ -6,8 +6,7 @@ import 'package:group_expense_management/models/group_model.dart';
 class GroupRepository {
   GroupRepository._privateConstructor();
 
-  static GroupRepository instance =
-      GroupRepository._privateConstructor();
+  static GroupRepository instance = GroupRepository._privateConstructor();
 
   FirebaseFirestore get fireStore {
     return FirebaseFirestore.instance;
@@ -22,11 +21,12 @@ class GroupRepository {
       final snapshot = await fireStore
           .collection("groups")
           .where('enable', isEqualTo: true)
-          .where('members', arrayContains: uid)
+          .where(Filter.or(
+              Filter('members', arrayContains: uid),
+              Filter('managers', arrayContains: uid),
+              Filter('owner', isEqualTo: uid)))
           .get();
-      return snapshot.docs
-          .map((e) => GroupModel.fromSnapshot(e))
-          .toList();
+      return snapshot.docs.map((e) => GroupModel.fromSnapshot(e)).toList();
     } catch (e) {
       debugPrint("====> Error get all group by id: $e");
       return [];
@@ -40,9 +40,7 @@ class GroupRepository {
           .where('enable', isEqualTo: true)
           .where('id', isEqualTo: id)
           .get();
-      return snapshot.docs
-          .map((e) => GroupModel.fromSnapshot(e))
-          .firstOrNull;
+      return snapshot.docs.map((e) => GroupModel.fromSnapshot(e)).firstOrNull;
     } catch (e) {
       debugPrint("====> Error get transaction by id: $e");
       return null;
@@ -62,10 +60,7 @@ class GroupRepository {
 
   Future<void> updateGroup(GroupModel model) async {
     try {
-      await fireStore
-          .collection('groups')
-          .doc("groups_${model.id}")
-          .set({
+      await fireStore.collection('groups').doc("groups_${model.id}").set({
         ...model.toJson(),
         "updateAt": DateTime.now(),
       });

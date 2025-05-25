@@ -65,7 +65,7 @@ class CardGroup extends StatelessWidget {
             ],
           ),
           SizedBox(height: Resizable.size(context, 2)),
-          Text("${AppText.textMembers.text}: ${group.members.length}",
+          Text("${AppText.textMembers.text}: ${group.members.length + group.managers.length + 1}",
               style: TextStyle(
                   fontSize: Resizable.size(context, 16),
                   fontWeight: FontWeight.w500,

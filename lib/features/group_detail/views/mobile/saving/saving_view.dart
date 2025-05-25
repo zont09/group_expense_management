@@ -13,7 +13,6 @@ class SavingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("=====> Rebuild SavingView:");
     return Container(
         height: double.infinity,
         width: double.infinity,

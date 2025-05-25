@@ -28,8 +28,6 @@ class BudgetView extends StatelessWidget {
       }
     });
 
-    debugPrint("=====> budget 2: ${cubitDt.budgets?.length}");
-    debugPrint("=====> budget details 2: ${cubitDt.budgetDetails?.length}");
 
     return Padding(
       padding: const EdgeInsets.all(20),

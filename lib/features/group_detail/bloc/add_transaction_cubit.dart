@@ -66,7 +66,6 @@ class AddTransactionCubit extends Cubit<int> {
       Function(TransactionModel) updTran,
       Function(WalletModel) updWallet) async {
     if (model == null) return;
-    debugPrint("====> update transaction");
     final oldCatType = model!.category.split('_')[1] == '0' ? -1 : 1;
     final newCatType = (category?.type.toString() ?? '0') == '0' ? -1 : 1;
     double newAmount = 0;

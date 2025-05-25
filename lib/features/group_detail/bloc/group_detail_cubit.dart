@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:group_expense_management/main_cubit.dart';
 import 'package:group_expense_management/models/budget_detail_model.dart';
 import 'package:group_expense_management/models/budget_model.dart';
 import 'package:group_expense_management/models/category_model.dart';
 import 'package:group_expense_management/models/group_model.dart';
 import 'package:group_expense_management/models/saving_model.dart';
 import 'package:group_expense_management/models/transaction_model.dart';
+import 'package:group_expense_management/models/user_model.dart';
 import 'package:group_expense_management/models/wallet_model.dart';
 import 'package:group_expense_management/services/budget_service.dart';
 import 'package:group_expense_management/services/category_service.dart';
@@ -14,7 +16,7 @@ import 'package:group_expense_management/services/transaction_service.dart';
 import 'package:group_expense_management/services/wallet_service.dart';
 
 class GroupDetailCubit extends Cubit<int> {
-  GroupDetailCubit(this.group) : super(0);
+  GroupDetailCubit(this.group, this.mC) : super(0);
 
   final TransactionService _transactionService = TransactionService.instance;
   final WalletService _walletService = WalletService.instance;
@@ -22,6 +24,8 @@ class GroupDetailCubit extends Cubit<int> {
   final BudgetService _budgetService = BudgetService.instance;
   final SavingService _savingService = SavingService.instance;
   late GroupModel group;
+  late MainCubit mC;
+  UserModel userCurrent = UserModel();
 
   List<TransactionModel>? transactions;
   List<WalletModel>? wallets;
@@ -59,10 +63,23 @@ class GroupDetailCubit extends Cubit<int> {
         }
       }
     }
-    debugPrint("=====> budget: ${budgets?.length}");
-    debugPrint("=====> budget details: ${budgetDetails?.length}");
     savings = await _savingService.getAllSavingsByGroup(group.id);
     transactions!.sort((a, b) => b.date.compareTo(a.date));
+    if(group.owner == mC.user.id) {
+      UserModel tmp = mC.user;
+      tmp.roleInGroup = 0;
+      userCurrent = tmp;
+    }
+    if(group.managers.any((e) => e == mC.user.id)) {
+      UserModel tmp = mC.user;
+      tmp.roleInGroup = 1;
+      userCurrent = tmp;
+    }
+    if(group.members.any((e) => e == mC.user.id)) {
+      UserModel tmp = mC.user;
+      tmp.roleInGroup = 2;
+      userCurrent = tmp;
+    }
     calculateBudget();
     EMIT();
   }
@@ -172,7 +189,6 @@ class GroupDetailCubit extends Cubit<int> {
     } else {
       savings?.add(model);
     }
-    debugPrint("====> Update saving: ${model.id} - ${model.details.length}");
     EMIT();
   }
 
@@ -192,6 +208,7 @@ class GroupDetailCubit extends Cubit<int> {
 
   updateGroup(GroupModel model) {
     group = model;
+    debugPrint("====> update group: ----> EMIT");
     EMIT();
   }
 
