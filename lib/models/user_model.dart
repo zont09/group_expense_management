@@ -93,6 +93,11 @@ class UserModel {
     );
   }
 
+  int roleInGroup = 0;
+  // 0: owner
+  // 1: manager
+  // 2: member
+
   @override
   String toString() {
     return 'UserModel(id: $id, name: $name, email: $email, phone: $phone, wallets: $wallets, groups: $groups, enable: $enable)';

@@ -190,6 +190,11 @@ class GroupDetailCubit extends Cubit<int> {
     EMIT();
   }
 
+  updateGroup(GroupModel model) {
+    group = model;
+    EMIT();
+  }
+
   EMIT() {
     if(!isClosed) {
       emit(state + 1);
