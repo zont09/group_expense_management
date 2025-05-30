@@ -2,17 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/features/test/models.dart';
+import 'package:group_expense_management/main_cubit.dart';
 import 'package:group_expense_management/models/category_model.dart';
 import 'package:group_expense_management/models/group_model.dart';
+import 'package:group_expense_management/models/notification_model.dart';
 import 'package:group_expense_management/models/transaction_model.dart';
 import 'package:group_expense_management/models/user_model.dart';
 import 'package:group_expense_management/models/wallet_model.dart';
+import 'package:group_expense_management/services/notification_service.dart';
 import 'package:group_expense_management/services/transaction_service.dart';
 import 'package:group_expense_management/services/wallet_service.dart';
 import 'package:group_expense_management/utils/toast_utils.dart';
 
 class AddTransactionCubit extends Cubit<int> {
-  AddTransactionCubit(this.group, this.user) : super(0);
+  AddTransactionCubit(this.group, this.user, this.mC) : super(0);
 
   final TextEditingController conTitle = TextEditingController();
   final TextEditingController conAmount = TextEditingController();
@@ -25,6 +28,7 @@ class AddTransactionCubit extends Cubit<int> {
 
   late GroupModel group;
   late UserModel user;
+  late final MainCubit mC;
 
   bool isEdit = true;
   bool canEdit = true;
@@ -40,7 +44,8 @@ class AddTransactionCubit extends Cubit<int> {
       conAmount.text = model.amount.toString();
       conDes.text = model.description;
       wallet = ws.where((e) => e.id == model!.wallet).firstOrNull;
-      category = lc.where((e) => e.id == model!.category.split('_')[0]).firstOrNull;
+      category =
+          lc.where((e) => e.id == model!.category.split('_')[0]).firstOrNull;
     }
   }
 
@@ -57,6 +62,23 @@ class AddTransactionCubit extends Cubit<int> {
         date: date,
         createAt: DateTime.now());
     await TransactionService.instance.addTransaction(transaction);
+    final noti = NotificationModel(
+        id: FirebaseFirestore.instance.collection('notifications').doc().id,
+        date: DateTime.now(),
+        toUser: [
+          ...group.members.where((e) => e != mC.user.id),
+          ...group.managers.where((e) => e != mC.user.id),
+          if (group.owner != mC.user.id) mC.user.id
+        ],
+        notiTo: [
+          ...group.members.where((e) => e != mC.user.id),
+          ...group.managers.where((e) => e != mC.user.id),
+          if (group.owner != mC.user.id) mC.user.id
+        ],
+        group: group.id,
+        description:
+            "${mC.user.name} đã thêm giao dịch mới: ${category!.type == 0 ? "-" : "+"}${conAmount.text} vào ${group.name}");
+    NotificationService.instance.addNotification(noti);
     return transaction;
   }
 

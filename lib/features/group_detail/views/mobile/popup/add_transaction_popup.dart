@@ -40,7 +40,7 @@ class AddTransactionPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     final mC = MainCubit.fromContext(context);
     return BlocProvider(
-      create: (context) => AddTransactionCubit(group, mC.user)
+      create: (context) => AddTransactionCubit(group, mC.user, mC)
         ..initData(isEdit, wallets, categories, model: model),
       child: BlocBuilder<AddTransactionCubit, int>(
         builder: (c, s) {

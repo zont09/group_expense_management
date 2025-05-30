@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:group_expense_management/models/notification_model.dart';
 import 'package:group_expense_management/models/transaction_model.dart';
 
 class TransactionRepository {
