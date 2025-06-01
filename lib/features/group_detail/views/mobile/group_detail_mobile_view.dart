@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_expense_management/configs/color_configs.dart';
 import 'package:group_expense_management/features/group_detail/bloc/group_detail_cubit.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/budget/budget_view.dart';
+import 'package:group_expense_management/features/group_detail/views/mobile/chat/chat_bot_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/member/add_member_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/member/member_main_view.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/overview/overview_view.dart';
@@ -36,13 +37,18 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
     'Giao dịch',
     'Ngân sách',
     'Tiết kiệm',
-    'Thành viên'
+    'Thành viên',
+    'Chatbot'
   ];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: _tabs.length, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) return; // tránh trigger nhiều lần
+      setState(() {}); // gọi setState khi tab đã đổi
+    });
   }
 
   @override
@@ -53,6 +59,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("====> Tab controller: ${_tabController.index}");
     return BlocProvider(
       create: (context) =>
       GroupDetailCubit(widget.group, MainCubit.fromContext(context),)
@@ -117,16 +124,18 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                   cubitOv: cubit,
                 ),
                 MemberMainView(),
+                ChatBotView(cubitDt: cubit)
               ],
             ),
-            floatingActionButton: _buildFloatingActionButton(cubit),
+            floatingActionButton: _buildFloatingActionButton(cubit, isShow: _tabController.index != 5),
           );
         },
       ),
     );
   }
 
-  Widget _buildFloatingActionButton(GroupDetailCubit cubit) {
+  Widget _buildFloatingActionButton(GroupDetailCubit cubit, {bool isShow = true}) {
+    if(!isShow) return const SizedBox.shrink();
     return FloatingActionButton(
       onPressed: () => _showAddActionSheet(context, cubit),
       child: const Icon(Icons.add),

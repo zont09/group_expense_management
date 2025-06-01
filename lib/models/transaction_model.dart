@@ -146,6 +146,6 @@ class TransactionModel {
 
   @override
   String toString() {
-    return 'TransactionModel(id: $id, title: $title, description: $description, date: $date, wallet: $wallet, user: $user, group: $group, category: $category, isRepeat: $isRepeat, enable: $enable, createAt: $createAt, updateAt: $updateAt)';
+    return 'TransactionModel(id: $id, title: $title, amount: $amount, description: $description, date: $date, wallet: $wallet, user: $user, group: $group, category: $category, isRepeat: $isRepeat, enable: $enable, createAt: $createAt, updateAt: $updateAt)';
   }
 }

@@ -36,6 +36,7 @@ class GroupDetailCubit extends Cubit<int> {
   Map<String, double> mapMoneyBudget = {};
   Map<String, CategoryModel> mapCate = {};
   Map<String, TransactionModel> mapTrans = {};
+  List<UserModel> listUser = [];
 
   initData() async {
     transactions?.clear();
@@ -44,6 +45,7 @@ class GroupDetailCubit extends Cubit<int> {
     budgets?.clear();
     budgetDetails?.clear();
     savings?.clear();
+    listUser.clear();
     transactions = await _transactionService.getAllTransactionByGroup(group.id);
     for(var e in transactions ?? []) {
       mapTrans[e.id] = e;
@@ -69,16 +71,19 @@ class GroupDetailCubit extends Cubit<int> {
       UserModel tmp = mC.user;
       tmp.roleInGroup = 0;
       userCurrent = tmp;
+      listUser.add(tmp.copyWith());
     }
     if(group.managers.any((e) => e == mC.user.id)) {
       UserModel tmp = mC.user;
       tmp.roleInGroup = 1;
       userCurrent = tmp;
+      listUser.add(tmp.copyWith());
     }
     if(group.members.any((e) => e == mC.user.id)) {
       UserModel tmp = mC.user;
       tmp.roleInGroup = 2;
       userCurrent = tmp;
+      listUser.add(tmp.copyWith());
     }
     calculateBudget();
     EMIT();

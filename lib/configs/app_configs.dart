@@ -1,3 +1,3 @@
 class AppConfigs {
-  static String apiKey = '---API KEY---';
+  static String apiGeminiKey = 'AIzaSyC1zNiQEFa55z2L_kvSg7Jwe5W3CG8gTVM';
 }
