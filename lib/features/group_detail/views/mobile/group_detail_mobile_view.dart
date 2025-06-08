@@ -13,6 +13,7 @@ import 'package:group_expense_management/features/group_detail/views/mobile/popu
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_transaction_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/popup/add_wallet_popup.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/saving/saving_view.dart';
+import 'package:group_expense_management/features/group_detail/views/mobile/statistical/statistical_view.dart';
 import 'package:group_expense_management/features/group_detail/views/mobile/transaction/transaction_view.dart';
 import 'package:group_expense_management/main_cubit.dart';
 import 'package:group_expense_management/models/group_model.dart';
@@ -38,6 +39,7 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
     'Ngân sách',
     'Tiết kiệm',
     'Thành viên',
+    'Thống kê',
     'Chatbot'
   ];
 
@@ -124,10 +126,12 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
                   cubitOv: cubit,
                 ),
                 MemberMainView(),
-                ChatBotView(cubitDt: cubit)
+                StatisticalView(cubitDt: cubit),
+                ChatBotView(cubitDt: cubit),
+
               ],
             ),
-            floatingActionButton: _buildFloatingActionButton(cubit, isShow: _tabController.index != 5),
+            floatingActionButton: _buildFloatingActionButton(cubit, isShow: _tabController.index != 6),
           );
         },
       ),

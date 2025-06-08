@@ -11,7 +11,8 @@ class BudgetView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = "${DateTime.now().month - 1}/${DateTime.now().year}";
+    // final now = "${DateTime.now().month - 1}/${DateTime.now().year}";
+    final now = "4/${DateTime.now().year}";
     double sumSpent = 0;
     cubitDt.mapMoneyBudget.forEach((k, v) {
       final cat = k.split('_')[0];

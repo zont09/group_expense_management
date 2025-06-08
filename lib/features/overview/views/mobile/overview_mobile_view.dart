@@ -149,7 +149,9 @@ class OverviewMobileView extends StatelessWidget {
                                                       GroupDetailMainView(
                                                           group: group)));
                                         },
-                                        child: CardGroup(group: group)))
+                                        child: Container(
+                                          margin: EdgeInsets.symmetric(vertical: 4),
+                                            child: CardGroup(group: group))))
                             ],
                           ),
                         ),
