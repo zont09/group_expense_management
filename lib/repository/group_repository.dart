@@ -28,7 +28,7 @@ class GroupRepository {
           .get();
       return snapshot.docs.map((e) => GroupModel.fromSnapshot(e)).toList();
     } catch (e) {
-      debugPrint("====> Error get all group by id: $e");
+      debugPrint("====> Error get all group by user: $e");
       return [];
     }
   }

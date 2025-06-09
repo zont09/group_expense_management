@@ -173,13 +173,18 @@ class AddTransactionPopup extends StatelessWidget {
                               return;
                             }
                             if (wallet.amount <
-                                double.parse(cubit.conAmount.text)) {
+                                    double.parse(cubit.conAmount.text) &&
+                                cubit.category?.type != 1) {
                               ToastUtils.showBottomToast(context,
                                   "Ví không còn đủ số dư để thực hiện giao dịch");
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
                               return;
                             }
                             final updWallet = wallet.copyWith(
-                                amount: wallet.amount -
+                                amount: cubit.category?.type != 1 ? wallet.amount -
+                                    double.parse(cubit.conAmount.text) : wallet.amount +
                                     double.parse(cubit.conAmount.text));
                             await WalletService.instance
                                 .updateWallet(updWallet);
@@ -228,7 +233,13 @@ class DropdownCategory extends StatelessWidget {
       items: items.map((e) {
         return DropdownMenuItem<CategoryModel>(
           value: e,
-          child: Text(e.title),
+          child: Text(
+            e.title,
+            style: TextStyle(
+                color: e.type == 1
+                    ? ColorConfig.greenState
+                    : ColorConfig.redState),
+          ),
         );
       }).toList(),
       onChanged: (v) {

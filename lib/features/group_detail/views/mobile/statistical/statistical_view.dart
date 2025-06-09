@@ -8,12 +8,14 @@ import 'package:group_expense_management/utils/function_utils.dart';
 import 'package:group_expense_management/widgets/z_space.dart';
 
 class StatisticalView extends StatelessWidget {
-  const StatisticalView({super.key, required this.cubitDt});
+  const StatisticalView({super.key});
 
-  final GroupDetailCubit cubitDt;
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<GroupDetailCubit, int>(
+  builder: (cc, ss) {
+    var cubitDt = BlocProvider.of<GroupDetailCubit>(cc);
     return BlocProvider(
       create: (context) => StatisticalCubit(cubitDt)..initData(),
       child: BlocBuilder<StatisticalCubit, int>(
@@ -231,6 +233,8 @@ class StatisticalView extends StatelessWidget {
         },
       ),
     );
+  },
+);
   }
 }
 

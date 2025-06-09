@@ -117,16 +117,15 @@ class _GroupDetailMobileViewState extends State<GroupDetailMobileView>
               children: [
                 OverviewView(
                     group: widget.group,
-                    tabController: _tabController,
-                    cubit: cubit),
-                TransactionView(cubitDt: cubit),
+                    tabController: _tabController),
+                TransactionView(),
                 BudgetView(cubitDt: cubit),
                 SavingView(
                   savings: cubit.savings ?? [],
                   cubitOv: cubit,
                 ),
                 MemberMainView(),
-                StatisticalView(cubitDt: cubit),
+                StatisticalView(),
                 ChatBotView(cubitDt: cubit),
 
               ],

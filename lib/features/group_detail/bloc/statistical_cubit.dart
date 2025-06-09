@@ -19,7 +19,7 @@ class StatisticalCubit extends Cubit<int> {
   List<double> dayCostOutcome = List.filled(32, 0);
 
   initData() {
-    date = DateTime(2025, 4, 1);
+    date = DateTime.now();
     calcStatisticalByDay();
     calcStatisticalByCategory();
     EMIT();
@@ -30,10 +30,12 @@ class StatisticalCubit extends Cubit<int> {
     cateCostOut.clear();
     for (var e in cubitDt.transactions ?? <TransactionModel>[]) {
       if (!isSameMonthAndYear(e.date, date)) continue;
-      String cateId = e.category.split("_")[1];
+      String cateId = e.category.split("_")[0];
+      String cateType = e.category.split("_")[1];
+      debugPrint("====> Check cate statis: $cateId - ${cubitDt.mapCate[cateId]?.title}");
       String cate = cubitDt.mapCate[cateId]?.title ?? "Không rõ";
       // debugPrint("===> Check cate transaction:");
-      if(cateId == '1') {
+      if(cateType == '1') {
         if (!cateCostIn.containsKey(cate)) {
           cateCostIn[cate] = 0;
         }

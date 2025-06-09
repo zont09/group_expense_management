@@ -9,12 +9,14 @@ import 'package:group_expense_management/utils/dialog_utils.dart';
 import 'package:group_expense_management/widgets/z_space.dart';
 
 class TransactionView extends StatelessWidget {
-  const TransactionView({super.key, required this.cubitDt});
+  const TransactionView({super.key});
 
-  final GroupDetailCubit cubitDt;
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<GroupDetailCubit, int>(
+  builder: (cc, ss) {
+    var cubitDt = BlocProvider.of<GroupDetailCubit>(cc);
     return BlocProvider(
       create: (context) =>
           TransactionViewCubit()..initData(cubitDt.transactions ?? []),
@@ -75,6 +77,8 @@ class TransactionView extends StatelessWidget {
         },
       ),
     );
+  },
+);
   }
 }
 

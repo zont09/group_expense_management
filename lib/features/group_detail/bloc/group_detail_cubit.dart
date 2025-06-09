@@ -53,8 +53,10 @@ class GroupDetailCubit extends Cubit<int> {
     wallets = await _walletService.getAllWalletByGroup(group.id);
     categories = await _categoryService.getAllCategory();
     for(var e in categories ?? []) {
+      debugPrint("====> Cate: ${e.title}");
       mapCate[e.id] = e;
     }
+    categories?.sort((a, b) => a.type.compareTo(b.type));
     budgets = await _budgetService.getBudgetByGroup(group.id);
     budgetDetails = [];
     for(var e in budgets!) {

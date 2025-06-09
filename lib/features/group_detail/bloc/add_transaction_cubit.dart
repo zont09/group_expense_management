@@ -23,7 +23,6 @@ class AddTransactionCubit extends Cubit<int> {
   WalletModel? wallet;
   CategoryModel? category;
   List<WalletModel> listWallets = [];
-  List<CategoryModel> listCates = [];
   DateTime date = DateTime.now();
 
   late GroupModel group;

@@ -20,7 +20,7 @@ class TransactionModel {
     this.id = '',
     this.title = '',
     this.description = '',
-    this.amount = 0,
+    this.amount = 0.0,
     DateTime? date,
     this.wallet = '',
     this.user = '',
@@ -92,7 +92,7 @@ class TransactionModel {
       id: json['id'] ?? '',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
-      amount: json['amount'] ?? 0,
+      amount: json['amount'] ?? 0.0,
       date: json['date'] != null ? DateTime.parse(json['date']) : null,
       wallet: json['wallet'] ?? '',
       user: json['user'] ?? '',
@@ -119,7 +119,9 @@ class TransactionModel {
       id: data['id'] ?? snapshot.id,
       title: data['title'] ?? '',
       description: data['description'] ?? '',
-      amount: data['amount'] ?? 0,
+      amount: (data['amount'] is int)
+          ? (data['amount'] as int).toDouble()
+          : (data['amount'] ?? 0.0),
       date: data['date'] != null
           ? (data['date'] is Timestamp
               ? (data['date'] as Timestamp).toDate()

@@ -29,7 +29,7 @@ class TransactionRepository {
           .map((e) => TransactionModel.fromSnapshot(e))
           .toList();
     } catch (e) {
-      debugPrint("====> Error get all group by id: $e");
+      debugPrint("====> Error get all group by group: $e");
       return [];
     }
   }
